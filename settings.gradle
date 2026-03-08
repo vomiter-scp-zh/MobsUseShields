@@ -1,0 +1,34 @@
+pluginManagement {
+    def vomiterPluginVersion = "0.1.0"
+    repositories {
+        gradlePluginPortal()
+
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/vomiter-scp-zh/gradle-plugins")
+
+            credentials {
+                username = providers.gradleProperty("gpr.user").orNull
+                password = providers.gradleProperty("gpr.key").orNull
+            }
+
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+    plugins {
+        id "com.vomiter.forge-base" version vomiterPluginVersion
+        id "com.vomiter.dev-runtime" version vomiterPluginVersion
+        id "com.vomiter.langmerge" version vomiterPluginVersion
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+}

@@ -1,0 +1,59 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'com.vomiter.forge-base' version "0.1.0"
+    id 'com.vomiter.dev-runtime' version "0.1.0"
+    id 'com.vomiter.langmerge' version "0.1.0"
+}
+
+vomiterMod {
+    modId = mod_id
+    // 需要的話可以關掉某些功能
+    // enableMixinExtras = false
+    // enableDevJar = false
+}
+
+langMerge { modId = mod_id }
+
+version = mod_version
+group = mod_group_id
+base { archivesName = mod_id }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
+}
+
+apply from: 'gradle/runs.gradle'
+apply from: 'gradle/publishing-local.gradle'
+apply from: 'gradle/mixin.gradle'
+
+/*
+repositories {
+    maven {
+        url "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
+    maven { url "https://maven.blamejared.com" }
+}
+ */
+
+apply from: 'gradle/optional-dep.gradle'
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
+}
+
+//devRuntime.project(":common", true)
+
+/*
+/summon piglin ~ ~ ~ {IsImmuneToZombification:1,HandItems:[{id:crossbow,Count:1},{}]}
+/summon piglin ~ ~ ~ {IsImmuneToZombification:1,HandItems:[{id:diamond_axe,Count:1},{}]}
+/summon piglin ~ ~ ~ {IsImmuneToZombification:1, NoAI:1b}
+/summon hoglin ~ ~ ~ {IsImmuneToZombification:1,NoAI:1b}
+ */
