@@ -1,6 +1,9 @@
 package com.vomiter.mobsuseshields.mixin;
 
+import com.vomiter.mobsuseshields.Config;
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
+import com.vomiter.mobsuseshields.common.ShieldAnticipation;
+import com.vomiter.mobsuseshields.common.entity.ai.MobShieldCombatStatus;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -11,6 +14,8 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(Mob.class)
 public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
     @Unique
+    boolean MUS$SHIELD_DISABLED = false;
+    @Unique
     boolean MUS$CAN_USE_SHIELD = false;
     @Unique
     boolean MUS$SHIELD_GOAL_INJECTED = false;
@@ -18,6 +23,10 @@ public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
     long MUS$NEXT_SHIELD_ALLOWED_TICK = 0;
     @Unique
     long MUS$LAST_SHIELD_ATTEMPT_TICK = 0;
+    @Unique
+    MobShieldCombatStatus MUS$STATUS = MobShieldCombatStatus.ATTACK;
+    @Unique
+    ShieldAnticipation MUS$ANTICIPATION;
 
     protected MobMixin(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
         super(p_20966_, p_20967_);
@@ -54,12 +63,35 @@ public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
     }
 
     @Override
-    public long mus$getLastAttemptToUseShield() {
-        return MUS$LAST_SHIELD_ATTEMPT_TICK;
+    public ShieldAnticipation mus$getAnticipation() {
+        if(MUS$ANTICIPATION == null){
+            MUS$ANTICIPATION = new ShieldAnticipation((Mob)(Object)this);
+        }
+        return MUS$ANTICIPATION;
     }
 
     @Override
-    public void mus$setLastAttemptToUseShield() {
-        MUS$LAST_SHIELD_ATTEMPT_TICK = level().getGameTime();
+    public MobShieldCombatStatus mus$getMobShieldCombatStatus(){
+        return MUS$STATUS;
+    }
+
+    @Override
+    public void mus$setMobShieldCombatStatus(MobShieldCombatStatus status){
+        MUS$STATUS = status;
+    };
+
+    @Override
+    public boolean mus$shouldAnticipate() {
+        return Config.MOB_ALWAYS_ANTICIPATE || ICanUseShieldMob.super.mus$shouldAnticipate() ; // debug
+    }
+
+    @Override
+    public void mus$diableShield(boolean b){
+        MUS$SHIELD_DISABLED = b;
+    }
+
+    @Override
+    public boolean mus$isShieldDisabled(){
+        return MUS$SHIELD_DISABLED;
     }
 }

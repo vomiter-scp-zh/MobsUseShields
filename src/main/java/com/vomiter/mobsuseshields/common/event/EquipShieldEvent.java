@@ -5,7 +5,6 @@ import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
 import com.vomiter.mobsuseshields.common.entity.ai.MobUseShieldAttackGoal;
 import com.vomiter.mobsuseshields.common.entity.ai.MobUseShieldGoal;
 import com.vomiter.mobsuseshields.mixin.MeleeAttackGoalAccessor;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -47,7 +46,7 @@ public class EquipShieldEvent {
             mobUseShield.mus$setShieldGoalsInjected(true);
         }
 
-        MobsUseShields.LOGGER.info("Replaced Attack Goal");
-        MobsUseShields.LOGGER.info("Current Goals: {}", mob.goalSelector.getAvailableGoals().stream().map(WrappedGoal::getGoal).collect(Collectors.toSet()));
+        MobsUseShields.LOGGER.info("[MUS] Replaced Attack Goal");
+        MobsUseShields.LOGGER.info("[MUS] Current Goals: {}", mob.goalSelector.getAvailableGoals().stream().map(WrappedGoal::getGoal).collect(Collectors.toSet()));
     }
 }

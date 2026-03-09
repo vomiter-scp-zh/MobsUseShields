@@ -15,41 +15,51 @@ public class MobUseShieldGoal extends Goal {
 
     private final int useDuration;
     private final int cooldownDuration;
+    private final int checkContinueToUseInterval;
 
     private long stopShieldAtTick;
     private long stopShieldAtTickIfNoTarget;
     private boolean shieldExhaustion;
+    private long nextCheckContinueToUseAtTick;
 
     public MobUseShieldGoal(Mob mob, ICanUseShieldMob shieldMob) {
-        this(mob, shieldMob, 60, 120);
+        this(mob, shieldMob, 60, 60, 30);
     }
 
-    public MobUseShieldGoal(Mob mob, ICanUseShieldMob shieldMob, int useDuration, int cooldownDuration) {
+    public MobUseShieldGoal(Mob mob, ICanUseShieldMob shieldMob, int useDuration, int cooldownDuration, int checkContinueToUseInterval) {
         this.mob = mob;
         this.shieldMob = shieldMob;
         this.useDuration = useDuration;
         this.cooldownDuration = cooldownDuration;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        this.checkContinueToUseInterval = checkContinueToUseInterval;
     }
 
     @Override
     public boolean canUse() {
-        return ICanUseShieldMob.shouldStartShielding(mob);
+        var status = shieldMob.mus$getMobShieldCombatStatus();
+        return status == MobShieldCombatStatus.SHIELDING;
     }
 
     @Override
     public boolean canContinueToUse() {
         if (!shieldMob.mus$canUseShield()) return false;
         if (!(mob.getOffhandItem().getItem() instanceof ShieldItem)) return false;
+        if (shieldMob.mus$isShieldDisabled()) return false;
 
-        if(currentTime() > stopShieldAtTick){
+        if(currentTime() >= stopShieldAtTick){
             shieldExhaustion = true;
             return false;
         }
 
+        if(currentTime() >= nextCheckContinueToUseAtTick){
+            nextCheckContinueToUseAtTick = currentTime() + checkContinueToUseInterval;
+            return ICanUseShieldMob.shouldKeepShielding(mob);
+        }
+
         LivingEntity target = mob.getTarget();
         if (target == null || !target.isAlive()) {
-            if(currentTime() > stopShieldAtTickIfNoTarget) return false;
+            if(currentTime() >= stopShieldAtTickIfNoTarget) return false;
         }
 
         return true;
@@ -57,16 +67,24 @@ public class MobUseShieldGoal extends Goal {
 
     @Override
     public void start() {
-        stopShieldAtTick = mob.level().getGameTime() + useDuration;
+        var currentTime = mob.level().getGameTime();
+        stopShieldAtTick = currentTime + useDuration;
+        nextCheckContinueToUseAtTick = currentTime + checkContinueToUseInterval;
         updateTickWhenTargetPresent();
         mob.getNavigation().stop();
         mob.startUsingItem(InteractionHand.OFF_HAND);
+        shieldExhaustion = false;
+        shieldMob.mus$setMobShieldCombatStatus(MobShieldCombatStatus.SHIELDING);
+        shieldMob.mus$diableShield(false);
     }
 
     @Override
     public void stop() {
         mob.stopUsingItem();
-        if(shieldExhaustion) shieldMob.mus$setNextShieldAllowedTick(currentTime() + cooldownDuration);
+        if(shieldExhaustion) {
+            shieldMob.mus$setNextShieldAllowedTick(currentTime() + cooldownDuration);
+        }
+        shieldMob.mus$setMobShieldCombatStatus(MobShieldCombatStatus.ATTACK);
     }
 
     @Override

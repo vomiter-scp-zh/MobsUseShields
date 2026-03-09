@@ -20,7 +20,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "hurt", at = @At("RETURN"))
     private void attemptToShield(DamageSource p_21016_, float p_21017_, CallbackInfoReturnable<Boolean> cir){
         if((Object)this instanceof ICanUseShieldMob shieldMob){
-            shieldMob.mus$setLastAttemptToUseShield();
+            shieldMob.mus$attemptToShield();
         }
     }
 }
