@@ -95,6 +95,11 @@ public class MobUseShieldGoal extends Goal {
         if (target != null) {
             mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
             updateTickWhenTargetPresent();
+            double dx = target.getX() - mob.getX();
+            double dz = target.getZ() - mob.getZ();
+            float targetYaw = (float) (net.minecraft.util.Mth.atan2(dz, dx) * (180F / Math.PI)) - 90.0F;
+            mob.setYRot(targetYaw);
+            if(mob.tickCount % 3 == 0) nudgeTowardTarget(target);
         }
     }
 
@@ -109,5 +114,19 @@ public class MobUseShieldGoal extends Goal {
 
     private long currentTime(){
         return mob.level().getGameTime();
+    }
+
+    private void nudgeTowardTarget(LivingEntity target) {
+        double dx = target.getX() - mob.getX();
+        double dz = target.getZ() - mob.getZ();
+        double distSqr = dx * dx + dz * dz;
+        if (distSqr < 1.0E-6D) return;
+
+        double dist = Math.sqrt(distSqr);
+        double step = 0.05D; // 很小的位移
+        double x = mob.getX() + dx / dist * step;
+        double z = mob.getZ() + dz / dist * step;
+
+        mob.getMoveControl().setWantedPosition(x, mob.getY(), z, 0.1D); // 低速
     }
 }

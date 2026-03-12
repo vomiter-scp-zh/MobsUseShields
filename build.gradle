@@ -47,6 +47,8 @@ apply from: 'gradle/optional-dep.gradle'
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
+    compileOnly fg.deobf("curse.maven:entity-model-features-844662:7647252")
+    compileOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:7623545")
 }
 
 //devRuntime.project(":common", true)

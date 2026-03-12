@@ -27,12 +27,7 @@ public interface ICanUseShieldMob {
         }
     }
 
-    default boolean mus$shouldAnticipate(){
-        if(this instanceof Mob){
-            return mus$getAnticipation().defaultShouldAnticipate();
-        }
-        return false;
-    }
+    boolean mus$shouldAnticipate();
 
     static boolean shouldStartShielding(Mob mob) {
         var shieldMob = (ICanUseShieldMob) mob;

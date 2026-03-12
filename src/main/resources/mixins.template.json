@@ -12,7 +12,12 @@
   ],
   "client": [
     "AbstractZombieModelMixin",
-    "HumanoidModelMixin"
+    "HumanoidModelMixin",
+    "compat.emf.EMFModelPartRootAccessor",
+    "compat.emf.EMFModelPartRootMixin",
+    "compat.emf.EMFModelPartVanillaAccessor",
+    "compat.emf.EMFModelPartVanillaMixin",
+    "compat.emf.EMFModelPartWithStateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

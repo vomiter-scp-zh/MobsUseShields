@@ -4,13 +4,14 @@ import com.mojang.logging.LogUtils;
 import com.vomiter.mobsuseshields.common.event.EventHandler;
 import com.vomiter.mobsuseshields.common.registry.ModRegistries;
 import com.vomiter.mobsuseshields.data.ModDataGenerator;
-import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.slf4j.Logger;
 
 @Mod(MobsUseShields.MOD_ID)
@@ -31,9 +32,16 @@ public class MobsUseShields
         modBus.addListener(ModDataGenerator::generateData);
         ModRegistries.register(modBus);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        if(FMLEnvironment.dist.isClient()){
+            modBus.addListener(this::clientSetup);
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+    }
+
+    private void clientSetup(final FMLClientSetupEvent event){
+        //event.enqueueWork(EMFCompat::init);
     }
 
 }

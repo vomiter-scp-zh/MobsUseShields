@@ -95,5 +95,8 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
         }
     }
 
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void mus$syncBodyRotWhileShielding(CallbackInfo ci) {
 
+    }
 }

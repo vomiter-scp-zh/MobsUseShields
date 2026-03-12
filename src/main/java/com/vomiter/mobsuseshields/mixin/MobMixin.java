@@ -22,8 +22,6 @@ public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
     @Unique
     long MUS$NEXT_SHIELD_ALLOWED_TICK = 0;
     @Unique
-    long MUS$LAST_SHIELD_ATTEMPT_TICK = 0;
-    @Unique
     MobShieldCombatStatus MUS$STATUS = MobShieldCombatStatus.ATTACK;
     @Unique
     ShieldAnticipation MUS$ANTICIPATION;
@@ -78,11 +76,12 @@ public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
     @Override
     public void mus$setMobShieldCombatStatus(MobShieldCombatStatus status){
         MUS$STATUS = status;
-    };
+    }
+
 
     @Override
     public boolean mus$shouldAnticipate() {
-        return Config.MOB_ALWAYS_ANTICIPATE || ICanUseShieldMob.super.mus$shouldAnticipate() ; // debug
+        return mus$getAnticipation().defaultShouldAnticipate() || Config.MOB_CONSUME_SHIELD_DURABILITY;
     }
 
     @Override
