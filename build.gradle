@@ -50,6 +50,22 @@ dependencies {
     compileOnly fg.deobf("curse.maven:entity-model-features-844662:7647252")
     compileOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:7623545")
 }
+def devRuntimeProject(String path) {
+    evaluationDependsOn(path)
+    dependencies {
+        runtimeOnly files(
+                project(path)
+                        .tasks.named("devJar")
+                        .flatMap { it.archiveFile }
+        )
+        compileOnly project(path)
+    }
+    tasks.matching { it.name in ["runClient", "runServer", "runGameTestServer"] }.configureEach {
+        dependsOn("${path}:devJar")
+    }
+}
+devRuntimeProject(":neurolib")
+
 
 //devRuntime.project(":common", true)
 
