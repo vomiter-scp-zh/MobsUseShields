@@ -1,7 +1,7 @@
 package com.vomiter.mobsuseshields.common.entity.ai;
 
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
-import com.vomiter.neurolib.common.entity.ai.MutatedMeleeGoal;
+import com.vomiter.neurolib.common.entity.generic.MutatedMeleeGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
 public class MobUseShieldAttackGoal extends MutatedMeleeGoal {

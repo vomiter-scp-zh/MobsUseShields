@@ -4,7 +4,7 @@ import com.vomiter.mobsuseshields.MobsUseShields;
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
 import com.vomiter.mobsuseshields.common.entity.ai.MobUseShieldAttackGoal;
 import com.vomiter.mobsuseshields.common.entity.ai.MobUseShieldGoal;
-import com.vomiter.neurolib.common.entity.ai.GoalMutateUtils;
+import com.vomiter.neurolib.common.entity.generic.GoalMutateUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
