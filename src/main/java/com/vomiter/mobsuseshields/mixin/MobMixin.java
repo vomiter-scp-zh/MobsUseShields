@@ -81,7 +81,7 @@ public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
 
     @Override
     public boolean mus$shouldAnticipate() {
-        return mus$getAnticipation().defaultShouldAnticipate() || Config.MOB_CONSUME_SHIELD_DURABILITY;
+        return mus$getAnticipation().defaultShouldAnticipate() || Config.MOB_ALWAYS_ANTICIPATE;
     }
 
     @Override

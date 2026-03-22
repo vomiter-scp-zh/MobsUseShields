@@ -3,8 +3,10 @@ package com.vomiter.mobsuseshields;
 import com.mojang.logging.LogUtils;
 import com.vomiter.mobsuseshields.common.event.EventHandler;
 import com.vomiter.mobsuseshields.common.registry.ModRegistries;
+import com.vomiter.mobsuseshields.data.MobShieldConfigReloadListener;
 import com.vomiter.mobsuseshields.data.ModDataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -38,6 +40,9 @@ public class MobsUseShields
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            MinecraftForge.EVENT_BUS.addListener(MobShieldConfigReloadListener::onAddReloadListeners);
+        });
     }
 
     private void clientSetup(final FMLClientSetupEvent event){
