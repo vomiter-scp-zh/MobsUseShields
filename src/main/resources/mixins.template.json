@@ -13,6 +13,8 @@
   "client": [
     "AbstractZombieModelMixin",
     "HumanoidModelMixin",
+    "IllagerModelMixin",
+    "IllagerRendererMixin",
     "compat.emf.EMFModelPartRootAccessor",
     "compat.emf.EMFModelPartRootMixin",
     "compat.emf.EMFModelPartVanillaAccessor",

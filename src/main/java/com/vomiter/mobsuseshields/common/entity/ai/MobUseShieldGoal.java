@@ -6,6 +6,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.item.ShieldItem;
 
 import java.util.EnumSet;
@@ -58,7 +59,6 @@ public class MobUseShieldGoal extends Goal {
         if (target == null || !target.isAlive()) {
             if(currentTime() >= stopShieldAtTickIfNoTarget) return false;
         }
-
         return true;
     }
 
