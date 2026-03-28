@@ -1,4 +1,4 @@
-package com.vomiter.mobsuseshields.mixin;
+package com.vomiter.mobsuseshields.mixin.client;
 
 import com.vomiter.mobsuseshields.client.layer.IllagerShieldBlockingLayer;
 import net.minecraft.client.model.IllagerModel;

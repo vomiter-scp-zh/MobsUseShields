@@ -1,8 +1,7 @@
-package com.vomiter.mobsuseshields.mixin;
+package com.vomiter.mobsuseshields.mixin.client;
 
 import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.entity.IllagerRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.monster.AbstractIllager;

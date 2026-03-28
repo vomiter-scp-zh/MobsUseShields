@@ -24,7 +24,7 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
     }
 
     @WrapOperation(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;playHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)V"))
-    private void noPlayHurtSound(
+    private void mus$noPlayHurtSound(
             LivingEntity instance,
             DamageSource p_21160_,
             Operation<Void> original,
@@ -44,7 +44,7 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
                     target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"
             )
     )
-    private void noKnockBack(
+    private void mus$noKnockBack(
             LivingEntity instance,
             double strength,
             double x,
@@ -64,11 +64,15 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void noKnockBack2(
+    private void mus$shieldInteract(
             LivingEntity attacker, CallbackInfo ci
     ){
-        if(this instanceof ICanUseShieldMob shieldMob){
-            if(attacker.canDisableShield()){
+        if(this instanceof ICanUseShieldMob shieldMob && (Object)this instanceof Mob mob){
+            if(attacker.canDisableShield() || attacker.getMainHandItem().canDisableShield(
+                    mob.getOffhandItem(),
+                    mob,
+                    attacker
+            )){
                 shieldMob.mus$setNextShieldAllowedTick(level().getGameTime() + 20 * 5);
                 shieldMob.mus$diableShield(true);
             }
@@ -79,7 +83,7 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
     }
 
     @Inject(method = "hurtCurrentlyUsedShield", at = @At("HEAD"))
-    private void hurtShield(float damage, CallbackInfo ci){
+    private void mus$hurtShield(float damage, CallbackInfo ci){
         if((Object)this instanceof Mob mob && this instanceof ICanUseShieldMob && Config.MOB_CONSUME_SHIELD_DURABILITY && damage >= 3){
             int shieldDamage = Math.round(damage) + 1;
             ItemStack shieldStack = mob.getUseItem();

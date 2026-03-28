@@ -1,4 +1,4 @@
-package com.vomiter.mobsuseshields.mixin;
+package com.vomiter.mobsuseshields.mixin.client;
 
 import net.minecraft.client.model.AbstractZombieModel;
 import net.minecraft.client.model.HumanoidModel;

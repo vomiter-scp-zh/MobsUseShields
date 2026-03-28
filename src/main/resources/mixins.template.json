@@ -11,10 +11,10 @@
     "MobMixin"
   ],
   "client": [
-    "AbstractZombieModelMixin",
-    "HumanoidModelMixin",
-    "IllagerModelMixin",
-    "IllagerRendererMixin",
+    "client.AbstractZombieModelMixin",
+    "client.HumanoidModelMixin",
+    "client.IllagerModelMixin",
+    "client.IllagerRendererMixin",
     "compat.emf.EMFModelPartRootAccessor",
     "compat.emf.EMFModelPartRootMixin",
     "compat.emf.EMFModelPartVanillaAccessor",

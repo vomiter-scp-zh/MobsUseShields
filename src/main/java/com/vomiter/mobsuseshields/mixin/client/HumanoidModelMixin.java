@@ -1,4 +1,4 @@
-package com.vomiter.mobsuseshields.mixin;
+package com.vomiter.mobsuseshields.mixin.client;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.InteractionHand;
