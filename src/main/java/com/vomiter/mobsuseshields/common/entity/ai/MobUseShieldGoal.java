@@ -3,10 +3,15 @@ package com.vomiter.mobsuseshields.common.entity.ai;
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
 import com.vomiter.neurolib.common.entity.generic.EntityControlHelpers;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
+import net.minecraft.world.entity.monster.piglin.Piglin;
+import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.item.ShieldItem;
 
 import java.util.EnumSet;
@@ -88,6 +93,20 @@ public class MobUseShieldGoal extends Goal {
     public void tick() {
         LivingEntity target = mob.getTarget();
         //mob.getNavigation().stop();
+
+        if(mob instanceof AbstractPiglin piglin){
+            //add effect is a silly workaround.
+            //Maybe I'll make it an independent attribute modifier in the future
+            piglin.addEffect(
+                    new MobEffectInstance(
+                            MobEffects.MOVEMENT_SLOWDOWN,
+                            5,
+                            5,
+                            true,
+                            false
+                    )
+            );
+        }
 
         if (target != null) {
             mob.getLookControl().setLookAt(target, 30.0F, 30.0F);

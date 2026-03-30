@@ -8,6 +8,7 @@
     "LivingEntityAccessor",
     "LivingEntityMixin",
     "MeleeAttackGoalAccessor",
+    "MeleeAttackMixin",
     "MobMixin"
   ],
   "client": [

@@ -6,6 +6,7 @@ import com.vomiter.mobsuseshields.common.registry.ModRegistries;
 import com.vomiter.mobsuseshields.data.MobShieldConfigReloadListener;
 import com.vomiter.mobsuseshields.data.ModDataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -48,5 +49,4 @@ public class MobsUseShields
     private void clientSetup(final FMLClientSetupEvent event){
         //event.enqueueWork(EMFCompat::init);
     }
-
 }

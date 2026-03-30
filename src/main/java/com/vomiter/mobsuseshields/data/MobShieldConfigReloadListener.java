@@ -9,7 +9,11 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -45,6 +49,12 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
                 int useDuration = GsonHelper.getAsInt(obj, "use_duration", 60);
                 int cooldownDuration = GsonHelper.getAsInt(obj, "cooldown_duration", 60);
                 int checkInterval = GsonHelper.getAsInt(obj, "check_continue_to_use_interval", 30);
+                String shieldId = GsonHelper.getAsString(obj, "shield_id", "minecraft:shield");
+                Item shieldItem = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(shieldId));
+                ItemStack shieldStack = shieldItem == null? new ItemStack(Items.SHIELD): new ItemStack(shieldItem);
+                float shieldChance = GsonHelper.getAsFloat(obj, "chance", 0);
+                float minDifficulty = GsonHelper.getAsFloat(obj, "min_difficulty", 2.25f);
+                //2.25 is the min value of local difficulty of hard mode.
 
                 MobShieldConfig config = new MobShieldConfig(
                         useDuration,
@@ -52,10 +62,17 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
                         checkInterval
                 );
 
+                MobShieldSpawnChanceConfig spawnConfig = new MobShieldSpawnChanceConfig(
+                        shieldStack,
+                        shieldChance,
+                        minDifficulty
+                );
+
                 // SimpleJsonResourceReloadListener 讀到的 key 會是：
                 // minecraft:zombie  <- 來自 data/minecraft/mob_shield/zombie.json
                 // yourmod:foo/bar   <- 來自 data/yourmod/mob_shield/foo/bar.json
                 MobShieldConfigManager.put(fileId, config);
+                MobShieldConfigManager.put(fileId, spawnConfig);
 
                 MobsUseShields.LOGGER.info("[MUS] Loaded shield config for {} -> {}", fileId, config);
             } catch (Exception e) {

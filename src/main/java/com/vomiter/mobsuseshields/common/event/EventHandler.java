@@ -10,6 +10,7 @@ public class EventHandler {
         final IEventBus bus = MinecraftForge.EVENT_BUS;
         bus.addListener(EventHandler::onRegisterCommands);
         bus.addListener(EquipShieldEvent::onMobEquipShield);
+        bus.addListener(MusMobSpawnEvent::onFinalizeSpawn);
     }
 
     public static void onRegisterCommands(RegisterCommandsEvent event) {
