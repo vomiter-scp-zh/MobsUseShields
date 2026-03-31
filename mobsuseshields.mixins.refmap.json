@@ -1,0 +1,110 @@
+{
+  "mappings": {
+    "com/vomiter/mobsuseshields/mixin/client/AbstractZombieModelMixin": {
+      "setupAnim(Lnet/minecraft/world/entity/monster/Monster;FFFFF)V": "Lnet/minecraft/client/model/AbstractZombieModel;m_6973_(Lnet/minecraft/world/entity/monster/Monster;FFFFF)V"
+    },
+    "com/vomiter/mobsuseshields/mixin/client/HumanoidModelMixin": {
+      "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V": "Lnet/minecraft/client/model/HumanoidModel;m_6973_(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V"
+    },
+    "com/vomiter/mobsuseshields/mixin/client/IllagerModelMixin": {
+      "setupAnim(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V": "Lnet/minecraft/client/model/IllagerModel;m_6973_(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V"
+    },
+    "com/vomiter/mobsuseshields/mixin/MeleeAttackGoalAccessor": {
+      "speedModifier": "f_25541_:D",
+      "mob": "f_25540_:Lnet/minecraft/world/entity/PathfinderMob;",
+      "followingTargetEvenIfNotSeen": "f_25542_:Z"
+    },
+    "com/vomiter/mobsuseshields/mixin/client/IllagerRendererMixin": {
+      "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/IllagerModel;F)V": "Lnet/minecraft/client/renderer/entity/IllagerRenderer;<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/IllagerModel;F)V"
+    },
+    "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ClientEntityEventDebugMixin": {
+      "handleEntityEvent": "Lnet/minecraft/world/entity/LivingEntity;m_7822_(B)V"
+    },
+    "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ShieldDebugMixin": {
+      "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+    },
+    "com/vomiter/mobsuseshields/mixin/LivingEntity_ShieldBlockEffectsMixin": {
+      "hurtCurrentlyUsedShield": "Lnet/minecraft/world/entity/LivingEntity;m_7909_(F)V",
+      "Lnet/minecraft/world/entity/LivingEntity;playHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)V": "Lnet/minecraft/world/entity/LivingEntity;m_6677_(Lnet/minecraft/world/damagesource/DamageSource;)V",
+      "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V": "Lnet/minecraft/world/entity/LivingEntity;m_147240_(DDD)V",
+      "tick": "Lnet/minecraft/world/entity/LivingEntity;m_8119_()V",
+      "blockUsingShield": "Lnet/minecraft/world/entity/LivingEntity;m_6728_(Lnet/minecraft/world/entity/LivingEntity;)V",
+      "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+    },
+    "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ClientShieldSoundDebugMixin": {
+      "handleEntityEvent": "Lnet/minecraft/world/entity/LivingEntity;m_7822_(B)V",
+      "Lnet/minecraft/world/entity/LivingEntity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V": "Lnet/minecraft/world/entity/LivingEntity;m_5496_(Lnet/minecraft/sounds/SoundEvent;FF)V"
+    },
+    "com/vomiter/mobsuseshields/mixin/LivingEntityMixin": {
+      "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+    },
+    "com/vomiter/mobsuseshields/mixin/compat/emf/EMFModelPartWithStateMixin": {
+      "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V": "Ltraben/entity_model_features/models/parts/EMFModelPartWithState;m_104306_(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"
+    },
+    "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ShieldBroadcastDebugMixin": {
+      "Lnet/minecraft/world/level/Level;broadcastEntityEvent(Lnet/minecraft/world/entity/Entity;B)V": "Lnet/minecraft/world/level/Level;m_7605_(Lnet/minecraft/world/entity/Entity;B)V",
+      "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+    },
+    "com/vomiter/mobsuseshields/mixin/LivingEntityAccessor": {
+      "lastHurt": "f_20898_:F"
+    },
+    "com/vomiter/mobsuseshields/mixin/MeleeAttackMixin": {
+      "Lnet/minecraft/world/entity/Mob;isWithinMeleeAttackRange(Lnet/minecraft/world/entity/LivingEntity;)Z": "Lnet/minecraft/world/entity/Mob;m_217066_(Lnet/minecraft/world/entity/LivingEntity;)Z"
+    }
+  },
+  "data": {
+    "searge": {
+      "com/vomiter/mobsuseshields/mixin/client/AbstractZombieModelMixin": {
+        "setupAnim(Lnet/minecraft/world/entity/monster/Monster;FFFFF)V": "Lnet/minecraft/client/model/AbstractZombieModel;m_6973_(Lnet/minecraft/world/entity/monster/Monster;FFFFF)V"
+      },
+      "com/vomiter/mobsuseshields/mixin/client/HumanoidModelMixin": {
+        "setupAnim(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V": "Lnet/minecraft/client/model/HumanoidModel;m_6973_(Lnet/minecraft/world/entity/LivingEntity;FFFFF)V"
+      },
+      "com/vomiter/mobsuseshields/mixin/client/IllagerModelMixin": {
+        "setupAnim(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V": "Lnet/minecraft/client/model/IllagerModel;m_6973_(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V"
+      },
+      "com/vomiter/mobsuseshields/mixin/MeleeAttackGoalAccessor": {
+        "speedModifier": "f_25541_:D",
+        "mob": "f_25540_:Lnet/minecraft/world/entity/PathfinderMob;",
+        "followingTargetEvenIfNotSeen": "f_25542_:Z"
+      },
+      "com/vomiter/mobsuseshields/mixin/client/IllagerRendererMixin": {
+        "<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/IllagerModel;F)V": "Lnet/minecraft/client/renderer/entity/IllagerRenderer;<init>(Lnet/minecraft/client/renderer/entity/EntityRendererProvider$Context;Lnet/minecraft/client/model/IllagerModel;F)V"
+      },
+      "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ClientEntityEventDebugMixin": {
+        "handleEntityEvent": "Lnet/minecraft/world/entity/LivingEntity;m_7822_(B)V"
+      },
+      "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ShieldDebugMixin": {
+        "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+      },
+      "com/vomiter/mobsuseshields/mixin/LivingEntity_ShieldBlockEffectsMixin": {
+        "hurtCurrentlyUsedShield": "Lnet/minecraft/world/entity/LivingEntity;m_7909_(F)V",
+        "Lnet/minecraft/world/entity/LivingEntity;playHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)V": "Lnet/minecraft/world/entity/LivingEntity;m_6677_(Lnet/minecraft/world/damagesource/DamageSource;)V",
+        "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V": "Lnet/minecraft/world/entity/LivingEntity;m_147240_(DDD)V",
+        "tick": "Lnet/minecraft/world/entity/LivingEntity;m_8119_()V",
+        "blockUsingShield": "Lnet/minecraft/world/entity/LivingEntity;m_6728_(Lnet/minecraft/world/entity/LivingEntity;)V",
+        "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+      },
+      "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ClientShieldSoundDebugMixin": {
+        "handleEntityEvent": "Lnet/minecraft/world/entity/LivingEntity;m_7822_(B)V",
+        "Lnet/minecraft/world/entity/LivingEntity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V": "Lnet/minecraft/world/entity/LivingEntity;m_5496_(Lnet/minecraft/sounds/SoundEvent;FF)V"
+      },
+      "com/vomiter/mobsuseshields/mixin/LivingEntityMixin": {
+        "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+      },
+      "com/vomiter/mobsuseshields/mixin/compat/emf/EMFModelPartWithStateMixin": {
+        "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V": "Ltraben/entity_model_features/models/parts/EMFModelPartWithState;m_104306_(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V"
+      },
+      "com/vomiter/mobsuseshields/mixin/debug/LivingEntity_ShieldBroadcastDebugMixin": {
+        "Lnet/minecraft/world/level/Level;broadcastEntityEvent(Lnet/minecraft/world/entity/Entity;B)V": "Lnet/minecraft/world/level/Level;m_7605_(Lnet/minecraft/world/entity/Entity;B)V",
+        "hurt": "Lnet/minecraft/world/entity/LivingEntity;m_6469_(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+      },
+      "com/vomiter/mobsuseshields/mixin/LivingEntityAccessor": {
+        "lastHurt": "f_20898_:F"
+      },
+      "com/vomiter/mobsuseshields/mixin/MeleeAttackMixin": {
+        "Lnet/minecraft/world/entity/Mob;isWithinMeleeAttackRange(Lnet/minecraft/world/entity/LivingEntity;)Z": "Lnet/minecraft/world/entity/Mob;m_217066_(Lnet/minecraft/world/entity/LivingEntity;)Z"
+      }
+    }
+  }
+}

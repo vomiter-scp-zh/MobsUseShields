@@ -9,18 +9,22 @@ import net.minecraftforge.event.entity.living.MobSpawnEvent;
 
 public class MusMobSpawnEvent {
     public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event) {
-        Mob mob = event.getEntity();
-        if(!(mob.level() instanceof ServerLevel serverLevel)) return;
 
-        // 避免覆蓋原本已有的副手物品
+        Mob mob = event.getEntity();
+        if (mob.level().isClientSide()) return;
         if (!mob.getOffhandItem().isEmpty()) {
             return;
         }
+
         MobShieldSpawnChanceConfig config = MobShieldConfigManager.getSpawn(mob.getType());
-        float difficulty = serverLevel.getCurrentDifficultyAt(mob.getOnPos()).getEffectiveDifficulty();
+
+        if(config == null) return;
+        var diffInstance = event.getDifficulty();
+        if(diffInstance == null) return;
+        float difficulty = diffInstance.getEffectiveDifficulty();
         if(difficulty < config.minDifficulty()) return;
         if(mob.getRandom().nextFloat() > config.chance()) return;
-
+        if(config.shield() == null) return;
         mob.setItemSlot(EquipmentSlot.OFFHAND, config.shield().copy());
         mob.setDropChance(EquipmentSlot.OFFHAND, 0.085f);
     }

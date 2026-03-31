@@ -10,9 +10,19 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(MeleeAttack.class)
 public class MeleeAttackMixin {
-    @WrapOperation(method = "lambda$create$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Mob;isWithinMeleeAttackRange(Lnet/minecraft/world/entity/LivingEntity;)Z"))
-    private static boolean mus$checkHoldingShield(Mob instance, LivingEntity p_217067_, Operation<Boolean> original){
-        if(instance.isBlocking()) return false;
-        else return original.call(instance, p_217067_);
+
+    @WrapOperation(
+            method = "*",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/entity/Mob;isWithinMeleeAttackRange(Lnet/minecraft/world/entity/LivingEntity;)Z"
+            ),
+            require = 1
+    )
+    private static boolean mus$checkHoldingShield(Mob instance, LivingEntity target, Operation<Boolean> original) {
+        if (instance.isBlocking()) {
+            return false;
+        }
+        return original.call(instance, target);
     }
 }
