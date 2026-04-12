@@ -1,6 +1,7 @@
 package com.vomiter.mobsuseshields.data;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.vomiter.mobsuseshields.MobsUseShields;
@@ -16,6 +17,8 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListener {
@@ -49,12 +52,6 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
                 int useDuration = GsonHelper.getAsInt(obj, "use_duration", 60);
                 int cooldownDuration = GsonHelper.getAsInt(obj, "cooldown_duration", 60);
                 int checkInterval = GsonHelper.getAsInt(obj, "check_continue_to_use_interval", 30);
-                String shieldId = GsonHelper.getAsString(obj, "shield_id", "minecraft:shield");
-                Item shieldItem = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(shieldId));
-                ItemStack shieldStack = shieldItem == null? new ItemStack(Items.SHIELD): new ItemStack(shieldItem);
-                float shieldChance = GsonHelper.getAsFloat(obj, "chance", 0);
-                float minDifficulty = GsonHelper.getAsFloat(obj, "min_difficulty", 2.25f);
-                //2.25 is the min value of local difficulty of hard mode.
 
                 MobShieldConfig config = new MobShieldConfig(
                         useDuration,
@@ -62,15 +59,8 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
                         checkInterval
                 );
 
-                MobShieldSpawnChanceConfig spawnConfig = new MobShieldSpawnChanceConfig(
-                        shieldStack,
-                        shieldChance,
-                        minDifficulty
-                );
+                MobShieldSpawnConfig spawnConfig = parseSpawnConfig(obj);
 
-                // SimpleJsonResourceReloadListener 讀到的 key 會是：
-                // minecraft:zombie  <- 來自 data/minecraft/mob_shield/zombie.json
-                // yourmod:foo/bar   <- 來自 data/yourmod/mob_shield/foo/bar.json
                 MobShieldConfigManager.put(fileId, config);
                 MobShieldConfigManager.put(fileId, spawnConfig);
 
@@ -81,5 +71,41 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
         }
 
         MobsUseShields.LOGGER.info("[MUS] Loaded {} mob shield configs", map.size());
+    }
+
+    private static MobShieldSpawnConfig parseSpawnConfig(JsonObject obj) {
+        if (obj.has("shields")) {
+            JsonArray arr = GsonHelper.getAsJsonArray(obj, "shields");
+            List<MobShieldSpawnEntry> entries = new ArrayList<>();
+
+            for (JsonElement element : arr) {
+                if (!element.isJsonObject()) {
+                    throw new IllegalArgumentException("'shields' must contain only JSON objects");
+                }
+                entries.add(parseSpawnEntry(element.getAsJsonObject()));
+            }
+
+            if (!entries.isEmpty()) {
+                return new MobShieldSpawnConfig(List.copyOf(entries));
+            }
+        }
+
+        // fallback: legacy single-entry fields
+        return new MobShieldSpawnConfig(List.of(parseSpawnEntry(obj)));
+    }
+
+    private static MobShieldSpawnEntry parseSpawnEntry(JsonObject obj) {
+        String shieldId = GsonHelper.getAsString(obj, "shield_id", "minecraft:shield");
+        Item shieldItem = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(shieldId));
+        ItemStack shieldStack = shieldItem == null ? new ItemStack(Items.SHIELD) : new ItemStack(shieldItem);
+
+        float shieldChance = GsonHelper.getAsFloat(obj, "chance", 0);
+        float minDifficulty = GsonHelper.getAsFloat(obj, "min_difficulty", 2.25f);
+
+        return new MobShieldSpawnEntry(
+                shieldStack,
+                shieldChance,
+                minDifficulty
+        );
     }
 }

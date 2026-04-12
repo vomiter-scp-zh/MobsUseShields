@@ -1,6 +1,7 @@
 package com.vomiter.mobsuseshields.common.entity.ai;
 
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
+import com.vomiter.mobsuseshields.common.runtime.MobShieldValueResolver;
 import com.vomiter.neurolib.common.entity.generic.EntityControlHelpers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -8,10 +9,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
-import net.minecraft.world.entity.monster.piglin.Piglin;
-import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.item.ShieldItem;
 
 import java.util.EnumSet;
@@ -20,22 +18,19 @@ public class MobUseShieldGoal extends Goal {
     private final Mob mob;
     private final ICanUseShieldMob shieldMob;
 
-    private final int useDuration;
-    private final int cooldownDuration;
-    private final int checkContinueToUseInterval;
+    private int activeUseDuration;
+    private int activeCooldownDuration;
+    private int activeCheckContinueToUseInterval;
 
     private long stopShieldAtTick;
     private long stopShieldAtTickIfNoTarget;
     private boolean shieldExhaustion;
     private long nextCheckContinueToUseAtTick;
 
-    public MobUseShieldGoal(Mob mob, ICanUseShieldMob shieldMob, int useDuration, int cooldownDuration, int checkContinueToUseInterval) {
+    public MobUseShieldGoal(Mob mob, ICanUseShieldMob shieldMob) {
         this.mob = mob;
         this.shieldMob = shieldMob;
-        this.useDuration = useDuration;
-        this.cooldownDuration = cooldownDuration;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-        this.checkContinueToUseInterval = checkContinueToUseInterval;
     }
 
     @Override
@@ -50,19 +45,19 @@ public class MobUseShieldGoal extends Goal {
         if (!(mob.getOffhandItem().getItem() instanceof ShieldItem)) return false;
         if (shieldMob.mus$isShieldDisabled()) return false;
 
-        if(currentTime() >= stopShieldAtTick){
+        if (currentTime() >= stopShieldAtTick) {
             shieldExhaustion = true;
             return false;
         }
 
-        if(currentTime() >= nextCheckContinueToUseAtTick){
-            nextCheckContinueToUseAtTick = currentTime() + checkContinueToUseInterval;
+        if (currentTime() >= nextCheckContinueToUseAtTick) {
+            nextCheckContinueToUseAtTick = currentTime() + activeCheckContinueToUseInterval;
             return ICanUseShieldMob.shouldKeepShielding(mob);
         }
 
         LivingEntity target = mob.getTarget();
         if (target == null || !target.isAlive()) {
-            if(currentTime() >= stopShieldAtTickIfNoTarget) return false;
+            if (currentTime() >= stopShieldAtTickIfNoTarget) return false;
         }
         return true;
     }
@@ -70,8 +65,9 @@ public class MobUseShieldGoal extends Goal {
     @Override
     public void start() {
         var currentTime = mob.level().getGameTime();
-        stopShieldAtTick = currentTime + useDuration;
-        nextCheckContinueToUseAtTick = currentTime + checkContinueToUseInterval;
+        refreshActiveConfig();
+        stopShieldAtTick = currentTime + activeUseDuration;
+        nextCheckContinueToUseAtTick = currentTime + activeCheckContinueToUseInterval;
         updateTickWhenTargetPresent();
         mob.getNavigation().stop();
         mob.startUsingItem(InteractionHand.OFF_HAND);
@@ -83,8 +79,8 @@ public class MobUseShieldGoal extends Goal {
     @Override
     public void stop() {
         mob.stopUsingItem();
-        if(shieldExhaustion) {
-            shieldMob.mus$setNextShieldAllowedTick(currentTime() + cooldownDuration);
+        if (shieldExhaustion) {
+            shieldMob.mus$setNextShieldAllowedTick(currentTime() + activeCooldownDuration);
         }
         shieldMob.mus$setMobShieldCombatStatus(MobShieldCombatStatus.ATTACK);
     }
@@ -92,11 +88,8 @@ public class MobUseShieldGoal extends Goal {
     @Override
     public void tick() {
         LivingEntity target = mob.getTarget();
-        //mob.getNavigation().stop();
 
-        if(mob instanceof AbstractPiglin piglin){
-            //add effect is a silly workaround.
-            //Maybe I'll make it an independent attribute modifier in the future
+        if (mob instanceof AbstractPiglin piglin) {
             piglin.addEffect(
                     new MobEffectInstance(
                             MobEffects.MOVEMENT_SLOWDOWN,
@@ -115,7 +108,7 @@ public class MobUseShieldGoal extends Goal {
             double dz = target.getZ() - mob.getZ();
             float targetYaw = (float) (net.minecraft.util.Mth.atan2(dz, dx) * (180F / Math.PI)) - 90.0F;
             mob.setYRot(targetYaw);
-            if(mob.tickCount % 3 == 0) EntityControlHelpers.nudgeTowardTarget(mob, target);
+            if (mob.tickCount % 3 == 0) EntityControlHelpers.nudgeTowardTarget(mob, target);
         }
     }
 
@@ -124,11 +117,17 @@ public class MobUseShieldGoal extends Goal {
         return true;
     }
 
-    private void updateTickWhenTargetPresent(){
+    private void refreshActiveConfig() {
+        this.activeUseDuration = MobShieldValueResolver.getUseDuration(this.mob);
+        this.activeCooldownDuration = MobShieldValueResolver.getCooldownDuration(this.mob);
+        this.activeCheckContinueToUseInterval = MobShieldValueResolver.getCheckContinueToUseInterval(this.mob);
+    }
+
+    private void updateTickWhenTargetPresent() {
         stopShieldAtTickIfNoTarget = currentTime() + 10;
     }
 
-    private long currentTime(){
+    private long currentTime() {
         return mob.level().getGameTime();
     }
 }
