@@ -54,7 +54,7 @@ public class ShieldAnticipation {
         if (targetUsing instanceof BowItem) return true;
         if (targetUsing instanceof TridentItem) return true;
         if (targetUsing instanceof ShieldItem) return false;
-        if (targetUsing.isEdible()) return false;
+        if (targetUsing.getFoodProperties(targetUsingStack, target) != null) return false;
         if(target.getMainHandItem().getItem() instanceof CrossbowItem && CrossbowItem.isCharged(target.getMainHandItem())) return true;
         if(target.getOffhandItem().getItem() instanceof CrossbowItem && CrossbowItem.isCharged(target.getOffhandItem())) return true;
         var attackAttributeInstance = target.getAttribute(Attributes.ATTACK_DAMAGE);

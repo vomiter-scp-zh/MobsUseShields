@@ -1,5 +1,6 @@
 package com.vomiter.mobsuseshields.data.loot;
 
+/*
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -13,3 +14,5 @@ public class SubLootTable implements LootTableSubProvider {
 
     }
 }
+
+ */

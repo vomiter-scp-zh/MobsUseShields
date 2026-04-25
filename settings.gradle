@@ -1,12 +1,7 @@
 pluginManagement {
-    def vomiterPluginVersion = "0.1.0"
+    def vomiterPluginVersion = "0.2.0"
     repositories {
         gradlePluginPortal()
-
-        maven {
-            name = 'MinecraftForge'
-            url = 'https://maven.minecraftforge.net/'
-        }
 
         maven {
             name = "GitHubPackages"
@@ -23,16 +18,12 @@ pluginManagement {
         }
     }
     plugins {
-        id "com.vomiter.forge-base" version vomiterPluginVersion
+        id "com.vomiter.neoforge-base" version vomiterPluginVersion
         id "com.vomiter.dev-runtime" version vomiterPluginVersion
         id "com.vomiter.langmerge" version vomiterPluginVersion
     }
 }
 
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.9.0'
 }
-
-def workspace = providers.gradleProperty("workspace").get()
-include(":neurolib")
-project(":neurolib").projectDir = file("${workspace}/NeuroLib")

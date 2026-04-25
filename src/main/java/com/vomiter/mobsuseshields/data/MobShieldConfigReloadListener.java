@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.vomiter.mobsuseshields.MobsUseShields;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -13,8 +14,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
 
     private static MobShieldSpawnEntry parseSpawnEntry(JsonObject obj) {
         String shieldId = GsonHelper.getAsString(obj, "shield_id", "minecraft:shield");
-        Item shieldItem = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(shieldId));
+        Item shieldItem = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(shieldId));
         ItemStack shieldStack = shieldItem == null ? new ItemStack(Items.SHIELD) : new ItemStack(shieldItem);
 
         float shieldChance = GsonHelper.getAsFloat(obj, "chance", 0);

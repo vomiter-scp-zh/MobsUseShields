@@ -1,77 +1,49 @@
 plugins {
-    id 'eclipse'
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.120'
     id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-    id 'org.spongepowered.mixin' version '0.7.+'
-    id 'com.vomiter.forge-base' version "0.1.0"
-    id 'com.vomiter.dev-runtime' version "0.1.0"
-    id 'com.vomiter.langmerge' version "0.1.0"
+    id 'com.vomiter.neoforge-base'
 }
 
-vomiterMod {
+vomiterNeoForge {
     modId = mod_id
-    // 需要的話可以關掉某些功能
-    // enableMixinExtras = false
-    // enableDevJar = false
+    // 你不需要改 expandTargets，因為 plugin 預設已對齊 META-INF/neoforge.mods.toml
 }
 
-langMerge { modId = mod_id }
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
 
 version = mod_version
 group = mod_group_id
-base { archivesName = mod_id }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
-minecraft {
-    mappings channel: mapping_channel, version: mapping_version
-    copyIdeResources = true
+base {
+    archivesName = mod_id
 }
 
-apply from: 'gradle/runs.gradle'
-apply from: 'gradle/publishing-local.gradle'
-apply from: 'gradle/mixin.gradle'
+// Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-/*
-repositories {
-    maven {
-        url "https://cursemaven.com"
-        content { includeGroup "curse.maven" }
-    }
-    maven { url "https://maven.blamejared.com" }
-}
- */
-
-apply from: 'gradle/optional-dep.gradle'
+apply from: 'gradle/neo-forge-runs.gradle'
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
-    compileOnly fg.deobf("curse.maven:entity-model-features-844662:7647252")
-    compileOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:7623545")
+    implementation "curse.maven:neurolib-1484243:7798811"
+    compileOnly "curse.maven:entity-model-features-844662:7938797"
+    compileOnly "curse.maven:entity-texture-features-fabric-568563:7930620"
 }
-def devRuntimeProject(String path) {
-    evaluationDependsOn(path)
-    dependencies {
-        runtimeOnly files(
-                project(path)
-                        .tasks.named("devJar")
-                        .flatMap { it.archiveFile }
-        )
-        compileOnly project(path)
+
+// Example configuration to allow publishing using the maven-publish plugin
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
     }
-    tasks.matching { it.name in ["runClient", "runServer", "runGameTestServer"] }.configureEach {
-        dependsOn("${path}:devJar")
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
     }
 }
-devRuntimeProject(":neurolib")
-
-
-//devRuntime.project(":common", true)
-
-/*
-/summon piglin ~ ~ ~ {IsImmuneToZombification:1,HandItems:[{id:crossbow,Count:1},{}]}
-/summon piglin ~ ~ ~ {IsImmuneToZombification:1,HandItems:[{id:diamond_axe,Count:1},{}]}
-/summon piglin ~ ~ ~ {IsImmuneToZombification:1, NoAI:1b}
-/summon hoglin ~ ~ ~ {IsImmuneToZombification:1,NoAI:1b}
- */

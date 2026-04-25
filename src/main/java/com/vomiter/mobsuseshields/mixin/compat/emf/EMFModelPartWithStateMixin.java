@@ -1,6 +1,7 @@
 package com.vomiter.mobsuseshields.mixin.compat.emf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.vomiter.mobsuseshields.MobsUseShields;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -22,7 +23,7 @@ import traben.entity_model_features.models.parts.EMFModelPartWithState;
 public abstract class EMFModelPartWithStateMixin {
 
     @Inject(
-        method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V",
+        method = "render",
         at = @At(
             value = "INVOKE",
             target = "Ltraben/entity_model_features/models/parts/EMFModelPart$Animator;run()V",
@@ -30,15 +31,7 @@ public abstract class EMFModelPartWithStateMixin {
         )
     )
     private void mus$applyBlockingPoseAfterEmfAnimation(
-        PoseStack matrices,
-        com.mojang.blaze3d.vertex.VertexConsumer vertices,
-        int light,
-        int overlay,
-        float red,
-        float green,
-        float blue,
-        float alpha,
-        CallbackInfo ci
+            PoseStack matrices, VertexConsumer vertices, int light, int overlay, int k, CallbackInfo ci
     ) {
         if (!(((Object) this) instanceof EMFModelPartVanilla vanillaPart)) {
             return;

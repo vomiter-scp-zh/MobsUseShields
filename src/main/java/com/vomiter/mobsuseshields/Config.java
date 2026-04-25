@@ -1,19 +1,19 @@
 package com.vomiter.mobsuseshields;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
-@Mod.EventBusSubscriber(modid = MobsUseShields.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MobsUseShields.MOD_ID)
 public class Config {
     public static boolean MOB_CONSUME_SHIELD_DURABILITY = false;
     public static boolean MOB_ALWAYS_ANTICIPATE = false;
 
-    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.BooleanValue MOB_CONSUME_SHIELD_DURABILITY_CONFIG;
-    private static final ForgeConfigSpec.BooleanValue MOB_ALWAYS_ANTICIPATE_CONFIG;
+    private static final ModConfigSpec.BooleanValue MOB_CONSUME_SHIELD_DURABILITY_CONFIG;
+    private static final ModConfigSpec.BooleanValue MOB_ALWAYS_ANTICIPATE_CONFIG;
 
     static {
         BUILDER.push("general");
@@ -29,7 +29,7 @@ public class Config {
         BUILDER.pop();
     }
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    static final ModConfigSpec SPEC = BUILDER.build();
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {

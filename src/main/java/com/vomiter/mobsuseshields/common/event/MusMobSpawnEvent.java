@@ -5,15 +5,17 @@ import com.vomiter.mobsuseshields.data.MobShieldSpawnConfig;
 import com.vomiter.mobsuseshields.data.MobShieldSpawnEntry;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 
 public class MusMobSpawnEvent {
-    public static void onFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event) {
-        Mob mob = event.getEntity();
+    public static void onFinalizeSpawn(EntityJoinLevelEvent event) {
+        if(event.loadedFromDisk()) return;
+        var entity = event.getEntity();
+        if (!(entity instanceof Mob mob)) return;
         if (mob.level().isClientSide()) return;
         if (!mob.getOffhandItem().isEmpty()) return;
 
-        var diffInstance = event.getDifficulty();
+        var diffInstance = mob.level().getCurrentDifficultyAt(mob.getOnPos());
         if (diffInstance == null) return;
         float difficulty = diffInstance.getEffectiveDifficulty();
 

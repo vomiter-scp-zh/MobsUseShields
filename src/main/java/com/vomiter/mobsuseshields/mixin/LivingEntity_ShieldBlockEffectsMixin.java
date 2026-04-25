@@ -90,7 +90,7 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
             if(!shieldStack.isEmpty()) shieldStack.hurtAndBreak(
                     shieldDamage,
                     mob,
-                    (e) -> e.broadcastBreakEvent(EquipmentSlot.OFFHAND)
+                    mob.getEquipmentSlotForItem(shieldStack)
             );
             if(shieldStack.isEmpty()){
                 mob.stopUsingItem();
