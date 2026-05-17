@@ -5,9 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "LivingEntity_ShieldBlockEffectsMixin",
-    "LivingEntityAccessor",
     "LivingEntityMixin",
-    "MeleeAttackGoalAccessor",
     "MeleeAttackMixin",
     "MobMixin"
   ],
@@ -16,10 +14,7 @@
     "client.HumanoidModelMixin",
     "client.IllagerModelMixin",
     "client.IllagerRendererMixin",
-    "compat.emf.EMFModelPartRootAccessor",
-    "compat.emf.EMFModelPartRootMixin",
     "compat.emf.EMFModelPartVanillaAccessor",
-    "compat.emf.EMFModelPartVanillaMixin",
     "compat.emf.EMFModelPartWithStateMixin"
   ],
   "injectors": {

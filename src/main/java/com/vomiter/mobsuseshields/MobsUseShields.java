@@ -2,11 +2,9 @@ package com.vomiter.mobsuseshields;
 
 import com.mojang.logging.LogUtils;
 import com.vomiter.mobsuseshields.common.event.EventHandler;
-import com.vomiter.mobsuseshields.common.registry.ModRegistries;
 import com.vomiter.mobsuseshields.data.MobShieldConfigReloadListener;
 import com.vomiter.mobsuseshields.data.ModDataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -33,7 +31,6 @@ public class MobsUseShields
         IEventBus modBus = context.getModEventBus();
         modBus.addListener(this::commonSetup);
         modBus.addListener(ModDataGenerator::generateData);
-        ModRegistries.register(modBus);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         if(FMLEnvironment.dist.isClient()){
             modBus.addListener(this::clientSetup);
