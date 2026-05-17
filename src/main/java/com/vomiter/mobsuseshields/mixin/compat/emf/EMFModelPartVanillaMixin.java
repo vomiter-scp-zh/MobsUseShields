@@ -7,6 +7,7 @@ import traben.entity_model_features.models.parts.EMFModelPartVanilla;
 
 import java.util.List;
 import java.util.Map;
+/*
 
 @Mixin(value = EMFModelPartVanilla.class, remap = false)
 public abstract class EMFModelPartVanillaMixin extends EMFModelPart{
@@ -14,7 +15,6 @@ public abstract class EMFModelPartVanillaMixin extends EMFModelPart{
     private EMFModelPartVanillaMixin(List<Cube> cuboids, Map<String, ModelPart> children) {
         super(cuboids, children);
     }
-/*
 
     @Inject(
         method = "render",
@@ -99,5 +99,6 @@ public abstract class EMFModelPartVanillaMixin extends EMFModelPart{
         return usingMainHand == mainArmRight;
     }
 
- */
 }
+
+ */

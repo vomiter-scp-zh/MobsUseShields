@@ -30,7 +30,7 @@ apply from: 'gradle/neo-forge-runs.gradle'
 
 dependencies {
     implementation "curse.maven:neurolib-1484243:7798811"
-    compileOnly "curse.maven:entity-model-features-844662:7938797"
+    compileOnly "curse.maven:entity-model-features-844662:8063559"
     compileOnly "curse.maven:entity-texture-features-fabric-568563:7930620"
 }
 
