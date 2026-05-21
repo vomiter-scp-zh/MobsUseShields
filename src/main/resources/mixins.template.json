@@ -15,7 +15,9 @@
     "client.IllagerModelMixin",
     "client.IllagerRendererMixin",
     "compat.emf.EMFModelPartVanillaAccessor",
-    "compat.emf.EMFModelPartWithStateMixin"
+    "compat.emf.EMFModelPartWithStateMixin",
+    "compat.iwa.IllagerBipedRendererMixin",
+    "compat.iwa.IllagerBipedModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

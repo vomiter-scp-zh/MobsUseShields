@@ -49,7 +49,10 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
     compileOnly fg.deobf("curse.maven:entity-model-features-844662:7647252")
     compileOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:7623545")
+    compileOnly fg.deobf("curse.maven:illagers-wear-armor-407488:5538877")
 }
+
+
 def devRuntimeProject(String path) {
     evaluationDependsOn(path)
     dependencies {
