@@ -24,7 +24,7 @@ public class IllagerShieldBlockingLayer<T extends AbstractIllager, M extends Ill
             @NotNull PoseStack poseStack,
             @NotNull MultiBufferSource buffer,
             int packedLight,
-            T entity,
+            @NotNull T entity,
             float limbSwing,
             float limbSwingAmount,
             float partialTick,

@@ -1,17 +1,17 @@
 package com.vomiter.mobsuseshields;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.neoforge.common.ModConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@EventBusSubscriber(modid = MobsUseShields.MOD_ID)
+@Mod.EventBusSubscriber(modid = MobsUseShields.MOD_ID)
 public class ClientConfig {
     public static boolean HIDE_PILLAGER_SHIELD_IN_ARMS = true;
 
-    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    private static final ModConfigSpec.BooleanValue HIDE_PILLAGER_SHIELD_IN_ARMS_CONFIG;
+    private static final ForgeConfigSpec.BooleanValue HIDE_PILLAGER_SHIELD_IN_ARMS_CONFIG;
 
     static {
         BUILDER.push("client");
@@ -23,7 +23,7 @@ public class ClientConfig {
         BUILDER.pop();
     }
 
-    public static final ModConfigSpec SPEC = BUILDER.build();
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
