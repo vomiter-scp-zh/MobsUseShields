@@ -1,5 +1,6 @@
 package com.vomiter.mobsuseshields.mixin.compat.iwa;
 
+import com.vomiter.mobsuseshields.ClientConfig;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.InteractionHand;
@@ -7,6 +8,7 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.UseAnim;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,6 +35,15 @@ public class IllagerBipedModelMixin extends HumanoidModel {
     private void mus$reapplyShieldBlockPose(
             AbstractIllager entity, float par2, float par3, float par4, float par5, float par6, CallbackInfo ci
     ) {
+        if(!ClientConfig.HIDE_PILLAGER_SHIELD_IN_ARMS){
+            var isHoldingShield = entity.getOffhandItem().getItem() instanceof ShieldItem;
+            if (isHoldingShield){
+                arms.visible = false;
+                rightArm.visible = true;
+                leftArm.visible = true;
+            }
+        }
+
         if (!entity.isUsingItem()) return;
 
         ItemStack using = entity.getUseItem();

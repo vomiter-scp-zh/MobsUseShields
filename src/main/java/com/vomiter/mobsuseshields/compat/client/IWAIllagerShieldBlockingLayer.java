@@ -1,12 +1,14 @@
 package com.vomiter.mobsuseshields.compat.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.vomiter.mobsuseshields.ClientConfig;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.UseAnim;
 import org.jetbrains.annotations.NotNull;
 import tallestegg.illagersweararmor.client.model.IllagerBipedModel;
@@ -30,6 +32,14 @@ public class IWAIllagerShieldBlockingLayer<T extends AbstractIllager, M extends 
             float netHeadYaw,
             float headPitch
     ) {
+        if(!ClientConfig.HIDE_PILLAGER_SHIELD_IN_ARMS){
+            var isHoldingShield = entity.getOffhandItem().getItem() instanceof ShieldItem;
+            if (isHoldingShield){
+                super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount, partialTick, ageInTicks, netHeadYaw, headPitch);
+            }
+        }
+
+
         if (!entity.isUsingItem()) return;
 
         ItemStack using = entity.getUseItem();

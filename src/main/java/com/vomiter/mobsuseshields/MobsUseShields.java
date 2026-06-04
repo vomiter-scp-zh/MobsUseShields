@@ -33,6 +33,7 @@ public class MobsUseShields
         mod.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         if(FMLEnvironment.dist.isClient()){
             modBus.addListener(this::clientSetup);
+            mod.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         }
     }
 
