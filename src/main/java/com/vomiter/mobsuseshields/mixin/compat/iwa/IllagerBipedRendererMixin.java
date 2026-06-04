@@ -24,6 +24,7 @@ public abstract class IllagerBipedRendererMixin<T extends AbstractIllager> exten
     private void mus$addShieldBlockingLayer(
             EntityRendererProvider.Context context, CallbackInfo ci
     ) {
+
         this.addLayer(new IWAIllagerShieldBlockingLayer<>(
                 (IllagerBipedRenderer<T>) (Object) this,
                 context.getItemInHandRenderer()
