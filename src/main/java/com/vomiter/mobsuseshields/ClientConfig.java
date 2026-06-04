@@ -5,7 +5,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = MobsUseShields.MOD_ID)
+@Mod.EventBusSubscriber(modid = MobsUseShields.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientConfig {
     public static boolean HIDE_PILLAGER_SHIELD_IN_ARMS = true;
 
