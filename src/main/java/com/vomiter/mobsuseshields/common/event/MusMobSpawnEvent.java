@@ -28,7 +28,7 @@ public class MusMobSpawnEvent {
             if (difficulty < entry.minDifficulty()) continue;
             if (mob.getRandom().nextFloat() > entry.chance()) continue;
 
-            mob.setItemSlot(EquipmentSlot.OFFHAND, entry.shield().copy());
+            mob.setItemSlot(EquipmentSlot.OFFHAND, entry.shield().apply(mob.registryAccess()).copy());
             mob.setDropChance(EquipmentSlot.OFFHAND, 0.085f);
             return;
         }

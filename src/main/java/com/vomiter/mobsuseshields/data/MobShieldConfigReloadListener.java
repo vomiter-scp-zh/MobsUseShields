@@ -5,7 +5,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.vomiter.mobsuseshields.MobsUseShields;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -20,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new Gson();
@@ -97,13 +101,28 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
     private static MobShieldSpawnEntry parseSpawnEntry(JsonObject obj) {
         String shieldId = GsonHelper.getAsString(obj, "shield_id", "minecraft:shield");
         Item shieldItem = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(shieldId));
-        ItemStack shieldStack = shieldItem == null ? new ItemStack(Items.SHIELD) : new ItemStack(shieldItem);
+        ItemStack fallbackStack = shieldItem == null ? new ItemStack(Items.SHIELD) : new ItemStack(shieldItem);
+        Function<HolderLookup.Provider, ItemStack> shieldStackGetter = (ra) -> {
+            if(obj.has("shield_stack")){
+                var stackString = obj.get("shield_stack").getAsString();
+                try {
+                    var tag = TagParser.parseTag(stackString);
+                    var stack = ItemStack.parseOptional(ra, tag);
+                    if (!stack.isEmpty()) return stack;
+                } catch (Exception e) {
+                    MobsUseShields.LOGGER.error("faild to load stack from {}", stackString);
+                    MobsUseShields.LOGGER.error(String.valueOf(e));
+                }
+            }
+            return fallbackStack;
+        };
+
 
         float shieldChance = GsonHelper.getAsFloat(obj, "chance", 0);
         float minDifficulty = GsonHelper.getAsFloat(obj, "min_difficulty", 2.25f);
 
         return new MobShieldSpawnEntry(
-                shieldStack,
+                shieldStackGetter,
                 shieldChance,
                 minDifficulty
         );

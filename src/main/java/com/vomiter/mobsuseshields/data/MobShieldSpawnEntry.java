@@ -1,12 +1,15 @@
 package com.vomiter.mobsuseshields.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-public record MobShieldSpawnEntry(ItemStack shield, float chance, float minDifficulty) {
+import java.util.function.Function;
+
+public record MobShieldSpawnEntry(Function<HolderLookup.Provider, ItemStack> shield, float chance, float minDifficulty) {
     public static final MobShieldSpawnEntry DEFAULT =
             new MobShieldSpawnEntry(
-                    new ItemStack(Items.SHIELD),
+                    (ra) -> new ItemStack(Items.SHIELD),
                     0,
                     2.25f
             );

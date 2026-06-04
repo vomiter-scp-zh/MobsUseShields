@@ -1,0 +1,6 @@
+{
+  "shield_stack": "{components:{\"minecraft:banner_patterns\":[{color:\"cyan\",pattern:\"minecraft:rhombus\"},{color:\"light_gray\",pattern:\"minecraft:stripe_bottom\"},{color:\"gray\",pattern:\"minecraft:stripe_center\"},{color:\"light_gray\",pattern:\"minecraft:half_horizontal\"},{color:\"black\",pattern:\"minecraft:stripe_middle\"},{color:\"light_gray\",pattern:\"minecraft:half_horizontal\"},{color:\"light_gray\",pattern:\"minecraft:circle\"},{color:\"black\",pattern:\"minecraft:border\"}],\"minecraft:base_color\":\"black\"},count:1,id:\"minecraft:shield\"}",
+  "enabled": true,
+  "chance": 0.1,
+  "min_difficulty": 4.1
+}
