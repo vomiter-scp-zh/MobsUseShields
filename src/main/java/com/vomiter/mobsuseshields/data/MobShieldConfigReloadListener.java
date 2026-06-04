@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.vomiter.mobsuseshields.MobsUseShields;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -98,6 +101,17 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
         String shieldId = GsonHelper.getAsString(obj, "shield_id", "minecraft:shield");
         Item shieldItem = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(shieldId));
         ItemStack shieldStack = shieldItem == null ? new ItemStack(Items.SHIELD) : new ItemStack(shieldItem);
+        if(obj.has("shield_stack")){
+            try {
+                var shieldStack1 = ItemStack.of(TagParser.parseTag(obj.get("shield_stack").getAsString()));
+                if(shieldStack1.isEmpty()){
+                    MobsUseShields.LOGGER.error("[Mobs Use Shield] shield stack is empty, fall back to {}", shieldId);
+                }
+                shieldStack = shieldStack1;
+            } catch (CommandSyntaxException e) {
+                MobsUseShields.LOGGER.error("[Mobs Use Shield] Failed to parse shield stack for {}, fallback to {}", obj.get("shield_stack"), shieldId);
+            }
+        }
 
         float shieldChance = GsonHelper.getAsFloat(obj, "chance", 0);
         float minDifficulty = GsonHelper.getAsFloat(obj, "min_difficulty", 2.25f);

@@ -1,0 +1,5 @@
+{
+  "chance": 0.1,
+  "min_difficulty": 4.0,
+  "shield_stack": "{id:\"minecraft:shield\",Count:1b,tag:{BlockEntityTag:{Base:15,Patterns:[{Pattern:\"mr\",Color:9},{Pattern:\"bs\",Color:8},{Pattern:\"cs\",Color:7},{Pattern:\"hh\",Color:8},{Pattern:\"ms\",Color:15},{Pattern:\"hh\",Color:8},{Pattern:\"mc\",Color:8},{Pattern:\"bo\",Color:15}]}}}"
+}
