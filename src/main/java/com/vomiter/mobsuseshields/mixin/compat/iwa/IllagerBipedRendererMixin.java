@@ -1,5 +1,6 @@
 package com.vomiter.mobsuseshields.mixin.compat.iwa;
 
+/*
 import com.vomiter.mobsuseshields.compat.client.IWAIllagerShieldBlockingLayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -32,3 +33,6 @@ public abstract class IllagerBipedRendererMixin<T extends AbstractIllager> exten
     }
 
 }
+
+
+ */

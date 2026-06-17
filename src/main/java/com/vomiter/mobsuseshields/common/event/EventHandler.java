@@ -10,7 +10,7 @@ public class EventHandler {
 
     public static void init(){
         final IEventBus bus = NeoForge.EVENT_BUS;
-        if(!FMLEnvironment.production) bus.addListener(EventHandler::onRegisterCommands);
+        if(!FMLEnvironment.isProduction()) bus.addListener(EventHandler::onRegisterCommands);
         bus.addListener(EquipShieldEvent::onMobEquipShield);
         bus.addListener(MusMobSpawnEvent::onFinalizeSpawn);
     }

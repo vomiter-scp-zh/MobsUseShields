@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
+/*
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -48,3 +49,5 @@ public class IWAIllagerShieldBlockingLayer<T extends AbstractIllager, M extends 
         super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount, partialTick, ageInTicks, netHeadYaw, headPitch);
     }
 }
+
+ */

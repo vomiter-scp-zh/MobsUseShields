@@ -18,25 +18,25 @@ public final class MobShieldRuntimeAccess {
         CompoundTag persistent = mob.getPersistentData();
         ShieldRuntimeOverrides overrides = new ShieldRuntimeOverrides();
 
-        if (!persistent.contains(ROOT, Tag.TAG_COMPOUND)) {
+        if (!persistent.contains(ROOT)) {
             return overrides;
         }
 
-        CompoundTag root = persistent.getCompound(ROOT);
-        if (!root.contains(OVERRIDES, Tag.TAG_COMPOUND)) {
+        CompoundTag root = persistent.getCompound(ROOT).get();
+        if (!root.contains(OVERRIDES)) {
             return overrides;
         }
 
-        CompoundTag tag = root.getCompound(OVERRIDES);
+        CompoundTag tag = root.getCompound(OVERRIDES).get();
 
-        if (tag.contains(USE_DURATION, Tag.TAG_INT)) {
-            overrides.setUseDuration(tag.getInt(USE_DURATION));
+        if (tag.contains(USE_DURATION)) {
+            overrides.setUseDuration(tag.getInt(USE_DURATION).get());
         }
-        if (tag.contains(COOLDOWN_DURATION, Tag.TAG_INT)) {
-            overrides.setCooldownDuration(tag.getInt(COOLDOWN_DURATION));
+        if (tag.contains(COOLDOWN_DURATION)) {
+            overrides.setCooldownDuration(tag.getInt(COOLDOWN_DURATION).get());
         }
-        if (tag.contains(CHECK_CONTINUE_TO_USE_INTERVAL, Tag.TAG_INT)) {
-            overrides.setCheckContinueToUseInterval(tag.getInt(CHECK_CONTINUE_TO_USE_INTERVAL));
+        if (tag.contains(CHECK_CONTINUE_TO_USE_INTERVAL)) {
+            overrides.setCheckContinueToUseInterval(tag.getInt(CHECK_CONTINUE_TO_USE_INTERVAL).get());
         }
 
         return overrides;
@@ -50,8 +50,8 @@ public final class MobShieldRuntimeAccess {
             return;
         }
 
-        CompoundTag root = persistent.contains(ROOT, Tag.TAG_COMPOUND)
-                ? persistent.getCompound(ROOT)
+        CompoundTag root = persistent.contains(ROOT)
+                ? persistent.getCompound(ROOT).get()
                 : new CompoundTag();
 
         CompoundTag tag = new CompoundTag();
@@ -72,11 +72,11 @@ public final class MobShieldRuntimeAccess {
 
     public static void clearOverrides(Mob mob) {
         CompoundTag persistent = mob.getPersistentData();
-        if (!persistent.contains(ROOT, Tag.TAG_COMPOUND)) {
+        if (!persistent.contains(ROOT)) {
             return;
         }
 
-        CompoundTag root = persistent.getCompound(ROOT);
+        CompoundTag root = persistent.getCompound(ROOT).get();
         root.remove(OVERRIDES);
 
         if (root.isEmpty()) {

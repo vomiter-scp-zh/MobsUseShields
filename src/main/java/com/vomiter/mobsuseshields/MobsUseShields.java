@@ -1,10 +1,11 @@
 package com.vomiter.mobsuseshields;
 
 import com.mojang.logging.LogUtils;
+import com.vomiter.mobsuseshields.client.ClientEventHandler;
 import com.vomiter.mobsuseshields.common.event.EventHandler;
 import com.vomiter.mobsuseshields.data.MobShieldConfigReloadListener;
 import com.vomiter.mobsuseshields.data.ModDataGenerator;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -22,17 +23,18 @@ public class MobsUseShields
     public static final String MOD_ID = "mobsuseshields";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static ResourceLocation modLoc(String path){
+    public static Identifier modLoc(String path){
         return Helpers.id(MobsUseShields.MOD_ID, path);
     }
 
     public MobsUseShields(ModContainer mod, IEventBus modBus) {
         EventHandler.init();
         modBus.addListener(this::commonSetup);
-        modBus.addListener(ModDataGenerator::generateData);
+        //modBus.addListener(ModDataGenerator::generateData);
         mod.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        if(FMLEnvironment.dist.isClient()){
+        if(FMLEnvironment.getDist().isClient()){
             modBus.addListener(this::clientSetup);
+            modBus.addListener(ClientEventHandler::registerRenderStateModifiers);
             mod.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
         }
     }

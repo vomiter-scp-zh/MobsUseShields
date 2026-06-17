@@ -5,12 +5,16 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.vomiter.mobsuseshields.Config;
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.hoglin.HoglinBase;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +27,7 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
         super(p_19870_, p_19871_);
     }
 
-    @WrapOperation(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;playHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)V"))
+    @WrapOperation(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;playHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)V"))
     private void mus$noPlayHurtSound(
             LivingEntity instance,
             DamageSource p_21160_,
@@ -31,14 +35,14 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
             @Local(name = "flag") boolean completeBlock
     ){
         if(completeBlock) {
-            instance.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 0.8F + instance.level().random.nextFloat() * 0.4F);
+            instance.playSound(SoundEvents.SHIELD_BLOCK.value(), 1.0F, 0.8F + instance.level().random.nextFloat() * 0.4F);
             return;
         }
         original.call(instance, p_21160_);
     }
 
     @WrapOperation(
-            method = "hurt",
+            method = "hurtServer",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"
@@ -60,19 +64,19 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
     }
 
     @Inject(
-            method = "blockUsingShield",
+            method = "blockUsingItem",
             at = @At("HEAD"),
             cancellable = true
     )
     private void mus$shieldInteract(
-            LivingEntity attacker, CallbackInfo ci
+            ServerLevel level, LivingEntity attacker, CallbackInfo ci
     ){
         if(this instanceof ICanUseShieldMob shieldMob && (Object)this instanceof Mob mob){
-            if(attacker.canDisableShield() || attacker.getMainHandItem().canDisableShield(
-                    mob.getOffhandItem(),
-                    mob,
-                    attacker
-            )){
+
+            Weapon weapon = attacker.getMainHandItem().get(DataComponents.WEAPON);
+            boolean canDisableBlocking = weapon != null && weapon.disableBlockingForSeconds() > 0;
+
+            if(attacker.getSecondsToDisableBlocking() > 0 || canDisableBlocking){
                 shieldMob.mus$setNextShieldAllowedTick(level().getGameTime() + 20 * 5);
                 shieldMob.mus$diableShield(true);
             }
@@ -82,20 +86,4 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
         }
     }
 
-    @Inject(method = "hurtCurrentlyUsedShield", at = @At("HEAD"))
-    private void mus$hurtShield(float damage, CallbackInfo ci){
-        if((Object)this instanceof Mob mob && this instanceof ICanUseShieldMob && Config.MOB_CONSUME_SHIELD_DURABILITY && damage >= 3){
-            int shieldDamage = Math.round(damage) + 1;
-            ItemStack shieldStack = mob.getUseItem();
-            if(!shieldStack.isEmpty()) shieldStack.hurtAndBreak(
-                    shieldDamage,
-                    mob,
-                    mob.getEquipmentSlotForItem(shieldStack)
-            );
-            if(shieldStack.isEmpty()){
-                mob.stopUsingItem();
-                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
-            }
-        }
-    }
 }

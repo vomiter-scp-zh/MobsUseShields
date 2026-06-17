@@ -3,6 +3,7 @@ package com.vomiter.mobsuseshields.common.event;
 import com.vomiter.mobsuseshields.data.MobShieldConfigManager;
 import com.vomiter.mobsuseshields.data.MobShieldSpawnConfig;
 import com.vomiter.mobsuseshields.data.MobShieldSpawnEntry;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -15,7 +16,7 @@ public class MusMobSpawnEvent {
         if (mob.level().isClientSide()) return;
         if (!mob.getOffhandItem().isEmpty()) return;
 
-        var diffInstance = mob.level().getCurrentDifficultyAt(mob.getOnPos());
+        var diffInstance = ((ServerLevel)mob.level()).getCurrentDifficultyAt(mob.getOnPos());
         if (diffInstance == null) return;
         float difficulty = diffInstance.getEffectiveDifficulty();
 

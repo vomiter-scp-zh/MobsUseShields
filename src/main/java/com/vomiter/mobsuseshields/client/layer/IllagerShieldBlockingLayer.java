@@ -2,48 +2,51 @@ package com.vomiter.mobsuseshields.client.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.vomiter.mobsuseshields.ClientConfig;
-import net.minecraft.client.model.IllagerModel;
-import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.vomiter.mobsuseshields.client.ClientEventHandler;
+import net.minecraft.client.model.monster.illager.IllagerModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
-import net.minecraft.world.entity.monster.AbstractIllager;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.client.renderer.entity.state.IllagerRenderState;
 import org.jetbrains.annotations.NotNull;
 
-public class IllagerShieldBlockingLayer<T extends AbstractIllager, M extends IllagerModel<T>> extends ItemInHandLayer<T, M> {
+public class IllagerShieldBlockingLayer extends ItemInHandLayer<
+        @NotNull IllagerRenderState,
+        @NotNull IllagerModel<@NotNull IllagerRenderState>
+        > {
 
-    public IllagerShieldBlockingLayer(RenderLayerParent<T, M> p_234846_, ItemInHandRenderer p_234847_) {
-        super(p_234846_, p_234847_);
+    public IllagerShieldBlockingLayer(
+            RenderLayerParent<@NotNull IllagerRenderState, @NotNull IllagerModel<@NotNull IllagerRenderState>> parent
+    ) {
+        super(parent);
     }
 
     @Override
-    public void render(
+    public void submit(
             @NotNull PoseStack poseStack,
-            @NotNull MultiBufferSource buffer,
+            @NotNull SubmitNodeCollector collector,
             int packedLight,
-            T entity,
-            float limbSwing,
-            float limbSwingAmount,
-            float partialTick,
-            float ageInTicks,
-            float netHeadYaw,
-            float headPitch
+            IllagerRenderState renderState,
+            float yRot,
+            float xRot
     ) {
-        if(!ClientConfig.HIDE_PILLAGER_SHIELD_IN_ARMS){
-            var isHoldingShield = entity.getOffhandItem().getItem() instanceof ShieldItem;
-            if (isHoldingShield){
-                super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount, partialTick, ageInTicks, netHeadYaw, headPitch);
-            }
+        boolean offhandShield = renderState.getRenderDataOrDefault(
+                ClientEventHandler.OFFHAND_SHIELD,
+                false
+        );
+
+        boolean usingShield = renderState.getRenderDataOrDefault(
+                ClientEventHandler.USING_SHIELD,
+                false
+        );
+
+        if (!ClientConfig.HIDE_PILLAGER_SHIELD_IN_ARMS && offhandShield) {
+            super.submit(poseStack, collector, packedLight, renderState, yRot, xRot);
+            return;
         }
 
-        if (!entity.isUsingItem()) return;
-
-        ItemStack using = entity.getUseItem();
-        if (using.isEmpty()) return;
-        if (using.getUseAnimation() != UseAnim.BLOCK) return;
-        super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount, partialTick, ageInTicks, netHeadYaw, headPitch);
+        if (usingShield) {
+            super.submit(poseStack, collector, packedLight, renderState, yRot, xRot);
+        }
     }
 }

@@ -92,7 +92,7 @@ public class MobUseShieldGoal extends Goal {
         if (mob instanceof AbstractPiglin piglin) {
             piglin.addEffect(
                     new MobEffectInstance(
-                            MobEffects.MOVEMENT_SLOWDOWN,
+                            MobEffects.SLOWNESS,
                             5,
                             5,
                             true,

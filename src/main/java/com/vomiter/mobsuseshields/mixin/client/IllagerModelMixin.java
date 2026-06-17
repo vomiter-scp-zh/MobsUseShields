@@ -1,19 +1,15 @@
 package com.vomiter.mobsuseshields.mixin.client;
 
 import com.vomiter.mobsuseshields.ClientConfig;
-import net.minecraft.client.model.IllagerModel;
+import com.vomiter.mobsuseshields.MobsUseShields;
+import com.vomiter.mobsuseshields.client.ClientEventHandler;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.monster.illager.IllagerModel;
+import net.minecraft.client.renderer.entity.state.IllagerRenderState;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.monster.AbstractIllager;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
-import net.minecraft.world.item.UseAnim;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -33,46 +29,69 @@ public class IllagerModelMixin {
     private ModelPart arms;
 
     @Inject(
-            method = "setupAnim(Lnet/minecraft/world/entity/monster/AbstractIllager;FFFFF)V",
+            method = "setupAnim(Lnet/minecraft/client/renderer/entity/state/IllagerRenderState;)V",
             at = @At("TAIL")
     )
     private void mus$reapplyShieldBlockPose(
-            AbstractIllager entity, float par2, float par3, float par4, float par5, float par6, CallbackInfo ci
+            IllagerRenderState renderState, CallbackInfo ci
     ) {
-        if(!ClientConfig.HIDE_PILLAGER_SHIELD_IN_ARMS){
-            var isHoldingShield = entity.getOffhandItem().getItem() instanceof ShieldItem;
-            if (isHoldingShield){
-                arms.visible = false;
-                rightArm.visible = true;
-                leftArm.visible = true;
+        boolean offhandShield = renderState.getRenderDataOrDefault(
+                ClientEventHandler.OFFHAND_SHIELD,
+                false
+        );
+
+        boolean usingShield = renderState.getRenderDataOrDefault(
+                ClientEventHandler.USING_SHIELD,
+                false
+        );
+
+        if (!ClientConfig.HIDE_PILLAGER_SHIELD_IN_ARMS) {
+            if (offhandShield) {
+                this.arms.visible = false;
+                this.rightArm.visible = true;
+                this.leftArm.visible = true;
             }
         }
 
-        if (!entity.isUsingItem()) return;
+        if (!usingShield) return;
 
-        ItemStack using = entity.getUseItem();
-        if (using.isEmpty()) return;
-        if (using.getUseAnimation() != UseAnim.BLOCK) return;
+        this.arms.visible = false;
+        this.rightArm.visible = true;
+        this.leftArm.visible = true;
 
-        arms.visible = false;
-        rightArm.visible = true;
-        leftArm.visible = true;
-        if (mus$usingRightArm(entity)) {
-            this.rightArm.xRot = -0.95F;
+        // 先清掉殘留 POSE
+        this.rightArm.x = -5.0F;
+        this.rightArm.y = 2.0F;
+        this.rightArm.z = 0.0F;
+        this.rightArm.xRot = 0.0F;
+        this.rightArm.yRot = 0.0F;
+        this.rightArm.zRot = 0.0F;
+
+        this.leftArm.x = 5.0F;
+        this.leftArm.y = 2.0F;
+        this.leftArm.z = 0.0F;
+        this.leftArm.xRot = 0.0F;
+        this.leftArm.yRot = 0.0F;
+        this.leftArm.zRot = 0.0F;
+
+        if (renderState.useItemHand == InteractionHand.MAIN_HAND) {
+            //wierd, but it seems to consider it's using main hand despite the shield being in offhand
+            //or is vindicator's left hand its main hand?
+            this.rightArm.xRot = -0.2F;
             this.rightArm.yRot = -0.52F;
             this.rightArm.zRot = 0.0F;
+
+            this.leftArm.xRot = -1F;
+            this.leftArm.yRot = 0.0F;
+            this.leftArm.zRot = 0.0F;
         } else {
-            this.leftArm.xRot = -0.95F;
+            this.leftArm.xRot = -0.2F;
             this.leftArm.yRot = 0.52F;
             this.leftArm.zRot = 0.0F;
+
+            this.rightArm.xRot = -1F;
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.0F;
         }
     }
-
-    @Unique
-    private static boolean mus$usingRightArm(Monster entity) {
-        boolean mainArmRight = entity.getMainArm() == HumanoidArm.RIGHT;
-        boolean usingMainHand = entity.getUsedItemHand() == InteractionHand.MAIN_HAND;
-        return usingMainHand == mainArmRight;
-    }
-
 }

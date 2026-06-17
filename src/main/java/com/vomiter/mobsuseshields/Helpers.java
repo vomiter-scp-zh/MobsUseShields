@@ -1,13 +1,13 @@
 package com.vomiter.mobsuseshields;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class Helpers {
-    public static ResourceLocation id(String namespace, String path){
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
+    public static Identifier id(String namespace, String path){
+        return Identifier.fromNamespaceAndPath(namespace, path);
     }
 
-    public static ResourceLocation id(String path){
+    public static Identifier id(String path){
         return id(MobsUseShields.MOD_ID, path);
     }
 }

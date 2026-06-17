@@ -1,5 +1,5 @@
 package com.vomiter.mobsuseshields.mixin.compat.iwa;
-
+/*
 import com.vomiter.mobsuseshields.ClientConfig;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -72,3 +72,5 @@ public class IllagerBipedModelMixin extends HumanoidModel {
     }
 
 }
+
+ */
