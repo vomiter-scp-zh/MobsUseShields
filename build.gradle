@@ -33,6 +33,9 @@ dependencies {
     compileOnly "curse.maven:entity-model-features-844662:8063559"
     compileOnly "curse.maven:entity-texture-features-fabric-568563:7930620"
     compileOnly "curse.maven:illagers-wear-armor-407488:5552789"
+    compileOnly "curse.maven:guard-villagers-360203:8230345"
+    runtimeOnly "curse.maven:guard-villagers-360203:8230345"
+
 }
 
 // Example configuration to allow publishing using the maven-publish plugin
