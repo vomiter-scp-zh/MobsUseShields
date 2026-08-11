@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -29,9 +30,21 @@ public class ModTagProviders {
         var itemTags = new ItemTags(blockTags);
         generator.addProvider(true, blockTags);
         generator.addProvider(true, itemTags);
+        generator.addProvider(true, new EntityTags());
 
     }
 
+    class EntityTags extends EntityTypeTagsProvider {
+
+        public EntityTags() {
+            super(output, lookupProvider, MobsUseShields.MOD_ID);
+        }
+
+        @Override
+        protected void addTags(HolderLookup.@NotNull Provider lookupProvider) {
+            tag(ModTags.DISABLE_SHIELD);
+        }
+    }
 
     class BlockTags extends BlockTagsProvider {
 

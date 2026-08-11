@@ -30,7 +30,7 @@ public class MobsUseShields
     public MobsUseShields(ModContainer mod, IEventBus modBus) {
         EventHandler.init();
         modBus.addListener(this::commonSetup);
-        //modBus.addListener(ModDataGenerator::generateData);
+        modBus.addListener(ModDataGenerator::generateData);
         mod.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         if(FMLEnvironment.getDist().isClient()){
             modBus.addListener(this::clientSetup);
