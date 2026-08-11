@@ -4,6 +4,7 @@ import com.vomiter.mobsuseshields.Config;
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
 import com.vomiter.mobsuseshields.common.ShieldAnticipation;
 import com.vomiter.mobsuseshields.common.entity.ai.MobShieldCombatStatus;
+import com.vomiter.mobsuseshields.data.ModTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -37,7 +38,7 @@ public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
 
     @Override
     public boolean mus$canUseShield() {
-        return MUS$CAN_USE_SHIELD;
+        return MUS$CAN_USE_SHIELD && !getType().is(ModTags.DISABLE_SHIELD);
     }
 
     @Override

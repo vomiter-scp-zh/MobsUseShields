@@ -3,10 +3,13 @@ package com.vomiter.mobsuseshields.data;
 import com.vomiter.mobsuseshields.Helpers;
 import com.vomiter.mobsuseshields.MobsUseShields;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -14,6 +17,7 @@ import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import org.jetbrains.annotations.NotNull;
+import tallestegg.guardvillagers.GuardEntityType;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -32,9 +36,24 @@ public class ModTagProviders {
         var itemTags = new ItemTags(blockTags);
         generator.addProvider(event.includeServer(), blockTags);
         generator.addProvider(event.includeServer(), itemTags);
+        generator.addProvider(event.includeServer(), new EntityTags());
 
     }
 
+    class EntityTags extends EntityTypeTagsProvider {
+
+        public EntityTags() {
+            super(output, lookupProvider, MobsUseShields.MOD_ID, helper);
+        }
+
+        @Override
+        protected void addTags(HolderLookup.@NotNull Provider lookupProvider) {
+            assert GuardEntityType.GUARD.getId() != null;
+            tag(ModTags.DISABLE_SHIELD).addOptional(
+                    GuardEntityType.GUARD.getId()
+            );
+        }
+    }
 
     class BlockTags extends BlockTagsProvider{
 

@@ -4,3 +4,4 @@
 /build/classes/java/main/
 /.idea/
 /run/
+/src/generated/resources/.cache/

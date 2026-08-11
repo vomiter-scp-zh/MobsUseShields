@@ -1,11 +1,9 @@
 package com.vomiter.mobsuseshields.common.event;
 
-import com.vomiter.mobsuseshields.MobsUseShields;
 import com.vomiter.mobsuseshields.common.ICanUseShieldMob;
 import com.vomiter.mobsuseshields.common.entity.ai.MobUseShieldAttackGoal;
 import com.vomiter.mobsuseshields.common.entity.ai.MobUseShieldGoal;
-import com.vomiter.mobsuseshields.data.MobShieldConfig;
-import com.vomiter.mobsuseshields.data.MobShieldConfigManager;
+import com.vomiter.mobsuseshields.data.ModTags;
 import com.vomiter.neurolib.common.entity.generic.GoalMutateUtils;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +20,7 @@ public class EquipShieldEvent {
         if (!(entity instanceof ICanUseShieldMob mobUseShield)) return;
         if (!event.getSlot().equals(EquipmentSlot.OFFHAND)) return;
         if (!(event.getTo().getItem() instanceof ShieldItem)) return;
+        if (entity.getType().is(ModTags.DISABLE_SHIELD)) return; //double safe
 
         mobUseShield.mus$setCanUseShield(true);
         if (!mobUseShield.mus$canUseShield()) return;
@@ -39,13 +38,6 @@ public class EquipShieldEvent {
             );
 
             mobUseShield.mus$setShieldGoalsInjected(true);
-
-            MobShieldConfig config = MobShieldConfigManager.get(mob.getType());
-            MobsUseShields.LOGGER.debug(
-                    "[MUS] Injected shield goal for {} with default config {}",
-                    mob.getType(),
-                    config
-            );
         }
 
         /*
