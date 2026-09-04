@@ -47,11 +47,15 @@ apply from: 'gradle/optional-dep.gradle'
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
-    compileOnly fg.deobf("curse.maven:entity-model-features-844662:7647252")
-    compileOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:7623545")
+    compileOnly fg.deobf("curse.maven:entity-model-features-844662:8799079")
+    compileOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:8789236")
     compileOnly fg.deobf("curse.maven:illagers-wear-armor-407488:5538877")
     compileOnly fg.deobf("curse.maven:guard-villagers-360203:7681617")
     runtimeOnly fg.deobf("curse.maven:guard-villagers-360203:7681617")
+
+    runtimeOnly fg.deobf("curse.maven:entity-model-features-844662:8799079")
+    runtimeOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:8789236")
+
 }
 
 
