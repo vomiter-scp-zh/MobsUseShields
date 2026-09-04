@@ -30,8 +30,11 @@ apply from: 'gradle/neo-forge-runs.gradle'
 
 dependencies {
     implementation "curse.maven:neurolib-1484243:7798811"
-    compileOnly "curse.maven:entity-model-features-844662:8063559"
-    compileOnly "curse.maven:entity-texture-features-fabric-568563:7930620"
+    compileOnly "curse.maven:entity-model-features-844662:8799082"
+    compileOnly "curse.maven:entity-texture-features-fabric-568563:8789239"
+    runtimeOnly "curse.maven:entity-model-features-844662:8799082"
+    runtimeOnly "curse.maven:entity-texture-features-fabric-568563:8789239"
+
     compileOnly "curse.maven:illagers-wear-armor-407488:5552789"
     compileOnly "curse.maven:guard-villagers-360203:8230345"
     runtimeOnly "curse.maven:guard-villagers-360203:8230345"
