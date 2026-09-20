@@ -50,6 +50,8 @@ public abstract class EMFModelPartWithStateMixin extends EMFModelPart{
             return;
         }
 
+        if (EMFState.state() == null) return;
+
         var emfEntity = EMFState.state().emfEntity();
 
         if (!(emfEntity instanceof LivingEntity entity)) {
