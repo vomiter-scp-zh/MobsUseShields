@@ -47,33 +47,19 @@ apply from: 'gradle/optional-dep.gradle'
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor("org.spongepowered:mixin:${mixin_version}:processor")
-    compileOnly fg.deobf("curse.maven:entity-model-features-844662:8799079")
+    implementation fg.deobf("curse.maven:neurolib-1484243:7897734")
+
+    compileOnly fg.deobf("curse.maven:entity-model-features-844662:8909423")
     compileOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:8789236")
+
+    runtimeOnly fg.deobf("curse.maven:entity-model-features-844662:8909423")
+    runtimeOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:8789236")
+
     compileOnly fg.deobf("curse.maven:illagers-wear-armor-407488:5538877")
     compileOnly fg.deobf("curse.maven:guard-villagers-360203:7681617")
     runtimeOnly fg.deobf("curse.maven:guard-villagers-360203:7681617")
 
-    runtimeOnly fg.deobf("curse.maven:entity-model-features-844662:8799079")
-    runtimeOnly fg.deobf("curse.maven:entity-texture-features-fabric-568563:8789236")
-
 }
-
-
-def devRuntimeProject(String path) {
-    evaluationDependsOn(path)
-    dependencies {
-        runtimeOnly files(
-                project(path)
-                        .tasks.named("devJar")
-                        .flatMap { it.archiveFile }
-        )
-        compileOnly project(path)
-    }
-    tasks.matching { it.name in ["runClient", "runServer", "runGameTestServer"] }.configureEach {
-        dependsOn("${path}:devJar")
-    }
-}
-devRuntimeProject(":neurolib")
 
 
 //devRuntime.project(":common", true)

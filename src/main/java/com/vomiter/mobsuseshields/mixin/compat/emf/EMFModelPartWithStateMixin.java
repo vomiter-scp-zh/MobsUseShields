@@ -2,6 +2,7 @@ package com.vomiter.mobsuseshields.mixin.compat.emf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.vomiter.mobsuseshields.MobsUseShields;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -26,6 +27,9 @@ import java.util.Map;
 
 @Mixin(value = EMFModelPartWithState.class)
 public abstract class EMFModelPartWithStateMixin extends EMFModelPart{
+
+    @Unique
+    private static boolean mus$loggedBlockingPoseError;
 
     public EMFModelPartWithStateMixin(List<Cube> cuboids, Map<String, ModelPart> children, EMFModelPartRoot root) {
         super(cuboids, children, root);
@@ -54,50 +58,60 @@ public abstract class EMFModelPartWithStateMixin extends EMFModelPart{
             float alpha,
             CallbackInfo ci
     ) {
-        if (!(((Object) this) instanceof EMFModelPartVanilla vanillaPart)) {
-            return;
-        }
-
-        var emfEntity = EMFState.state().emfEntity();
-
-        if (!(emfEntity instanceof LivingEntity entity)) {
-            return;
-        }
-
-        if (!(entity instanceof Mob)) {
-            return;
-        }
-
-        if (!entity.isUsingItem()) {
-            return;
-        }
-
-        ItemStack using = entity.getUseItem();
-        if (using.isEmpty() || using.getUseAnimation() != UseAnim.BLOCK) {
-            return;
-        }
-
-        String partName = ((EMFModelPartVanillaAccessor) vanillaPart).mus$getName();
-        boolean useRight = mus$usingRightArm(entity);
-
-        if (useRight) {
-            if (!"right_arm".equals(partName)) {
+        try{
+            if (!(((Object) this) instanceof EMFModelPartVanilla vanillaPart)) {
                 return;
             }
-        } else {
-            if (!"left_arm".equals(partName)) {
+
+            if (EMFState.state() == null) return;
+
+            var emfEntity = EMFState.state().emfEntity();
+
+            if (!(emfEntity instanceof LivingEntity entity)) {
                 return;
             }
-        }
 
-        vanillaPart.xRot = -1.20F;
+            if (!(entity instanceof Mob)) {
+                return;
+            }
 
-        if (useRight) {
-            vanillaPart.yRot = -0.6F;
-            vanillaPart.zRot = 0.10F;
-        } else {
-            vanillaPart.yRot = 0.6F;
-            vanillaPart.zRot = -0.10F;
+            if (!entity.isUsingItem()) {
+                return;
+            }
+
+            ItemStack using = entity.getUseItem();
+            if (using.isEmpty() || using.getUseAnimation() != UseAnim.BLOCK) {
+                return;
+            }
+
+            String partName = ((EMFModelPartVanillaAccessor) vanillaPart).mus$getName();
+            boolean useRight = mus$usingRightArm(entity);
+
+            if (useRight) {
+                if (!"right_arm".equals(partName)) {
+                    return;
+                }
+            } else {
+                if (!"left_arm".equals(partName)) {
+                    return;
+                }
+            }
+
+            vanillaPart.xRot = -1.20F;
+
+            if (useRight) {
+                vanillaPart.yRot = -0.6F;
+                vanillaPart.zRot = 0.10F;
+            } else {
+                vanillaPart.yRot = 0.6F;
+                vanillaPart.zRot = -0.10F;
+            }
+
+        } catch (Exception | LinkageError e) {
+            if (!mus$loggedBlockingPoseError) {
+                mus$loggedBlockingPoseError = true;
+                MobsUseShields.LOGGER.error("Failed to apply mob blocking pose; further errors will be suppressed", e);
+            }
         }
     }
 
