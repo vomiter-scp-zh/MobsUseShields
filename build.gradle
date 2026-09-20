@@ -98,7 +98,7 @@ configurations {
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
     implementation "curse.maven:entity-model-features-844662:8908885"
-    implementation "curse.maven:entity-texture-features-fabric-568563:8908949"
+    implementation "curse.maven:entity-texture-features-fabric-568563:8908933"
     implementation "curse.maven:neurolib-1484243:8258581"
 }
 
