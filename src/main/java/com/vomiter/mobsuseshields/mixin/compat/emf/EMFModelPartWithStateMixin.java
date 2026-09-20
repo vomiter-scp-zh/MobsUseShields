@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,6 +21,9 @@ import traben.entity_model_features.models.parts.EMFModelPartWithState;
 
 @Mixin(value = EMFModelPartWithState.class)
 public abstract class EMFModelPartWithStateMixin {
+
+    @Unique
+    private static boolean mus$loggedBlockingPoseError;
 
     @Inject(
             method = "render",
@@ -33,49 +37,60 @@ public abstract class EMFModelPartWithStateMixin {
     private void mus$applyBlockingPoseAfterEmfAnimation_322(
             PoseStack matrices, VertexConsumer vertices, int light, int overlay, int k, CallbackInfo ci
     ) {
-        if (!(((Object) this) instanceof EMFModelPartVanilla vanillaPart)) {
-            return;
-        }
+        try{
+            if (!(((Object) this) instanceof EMFModelPartVanilla vanillaPart)) {
+                return;
+            }
 
-        Object emfEntity = EMFState.state().entity();
-        if (!(emfEntity instanceof LivingEntity entity)) {
-            return;
-        }
+            if (EMFState.state() == null) return;
 
-        if (!(entity instanceof Mob)) {
-            return;
-        }
+            var emfEntity = EMFState.state().emfEntity();
 
-        if (!entity.isUsingItem()) {
-            return;
-        }
+            if (!(emfEntity instanceof LivingEntity entity)) {
+                return;
+            }
+
+            if (!(entity instanceof Mob)) {
+                return;
+            }
+
+            if (!entity.isUsingItem()) {
+                return;
+            }
 
         ItemStack using = entity.getUseItem();
         if (using.isEmpty() || using.getUseAnimation() != ItemUseAnimation.BLOCK) {
             return;
         }
 
-        String partName = ((EMFModelPartVanillaAccessor) vanillaPart).mus$getName();
-        boolean useRight = mus$usingRightArm(entity);
+            String partName = ((EMFModelPartVanillaAccessor) vanillaPart).mus$getName();
+            boolean useRight = mus$usingRightArm(entity);
 
-        if (useRight) {
-            if (!"right_arm".equals(partName)) {
-                return;
+            if (useRight) {
+                if (!"right_arm".equals(partName)) {
+                    return;
+                }
+            } else {
+                if (!"left_arm".equals(partName)) {
+                    return;
+                }
             }
-        } else {
-            if (!"left_arm".equals(partName)) {
-                return;
+
+            vanillaPart.xRot = -1.20F;
+
+            if (useRight) {
+                vanillaPart.yRot = -0.6F;
+                vanillaPart.zRot = 0.10F;
+            } else {
+                vanillaPart.yRot = 0.6F;
+                vanillaPart.zRot = -0.10F;
             }
-        }
 
-        vanillaPart.xRot = -1.20F;
-
-        if (useRight) {
-            vanillaPart.yRot = -0.6F;
-            vanillaPart.zRot = 0.10F;
-        } else {
-            vanillaPart.yRot = 0.6F;
-            vanillaPart.zRot = -0.10F;
+        } catch (Exception | LinkageError e) {
+            if (!mus$loggedBlockingPoseError) {
+                mus$loggedBlockingPoseError = true;
+                MobsUseShields.LOGGER.error("Failed to apply mob blocking pose; further errors will be suppressed", e);
+            }
         }
     }
 
