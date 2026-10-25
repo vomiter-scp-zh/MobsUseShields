@@ -19,7 +19,7 @@ import traben.entity_model_features.models.animation.state.EMFState;
 import traben.entity_model_features.models.parts.EMFModelPartVanilla;
 import traben.entity_model_features.models.parts.EMFModelPartWithState;
 
-@Mixin(value = EMFModelPartWithState.class)
+@Mixin(value = EMFModelPartWithState.class, remap = false)
 public abstract class EMFModelPartWithStateMixin {
 
     @Unique
@@ -32,7 +32,7 @@ public abstract class EMFModelPartWithStateMixin {
                     target = "Ltraben/entity_model_features/models/parts/EMFModelPartRoot;animate()V",
                     shift = At.Shift.AFTER
             ),
-            require = 0
+            require = 1
     )
     private void mus$applyBlockingPoseAfterEmfAnimation_322(
             PoseStack matrices, VertexConsumer vertices, int light, int overlay, int k, CallbackInfo ci

@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.monster.zombie.AbstractZombieModel;
 import net.minecraft.client.renderer.entity.state.ZombieRenderState;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +34,7 @@ public abstract class AbstractZombieModelMixin<T extends ZombieRenderState> exte
         );
         if(!usingShield) return;
 
-        if (renderState.useItemHand == InteractionHand.MAIN_HAND) {
+        if ((renderState.useItemHand == InteractionHand.MAIN_HAND) == (renderState.mainArm == HumanoidArm.RIGHT)) {
             this.rightArm.xRot = -0.95F;
             this.rightArm.yRot = -0.52F;
             this.rightArm.zRot = 0.0F;

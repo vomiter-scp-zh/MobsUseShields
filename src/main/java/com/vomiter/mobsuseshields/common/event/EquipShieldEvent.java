@@ -20,7 +20,7 @@ public class EquipShieldEvent {
         if (!(entity instanceof ICanUseShieldMob mobUseShield)) return;
         if (!event.getSlot().equals(EquipmentSlot.OFFHAND)) return;
         if (!(event.getTo().getItem() instanceof ShieldItem)) return;
-        if (entity.getType().is(ModTags.DISABLE_SHIELD)) return; //double safe
+        if (entity.is(ModTags.DISABLE_SHIELD)) return; //double safe
 
         mobUseShield.mus$setCanUseShield(true);
         if (!mobUseShield.mus$canUseShield()) return;

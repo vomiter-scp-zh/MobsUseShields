@@ -32,10 +32,10 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
             LivingEntity instance,
             DamageSource p_21160_,
             Operation<Void> original,
-            @Local(name = "flag") boolean completeBlock
+            @Local(name = "blocked") boolean completeBlock
     ){
         if(completeBlock) {
-            instance.playSound(SoundEvents.SHIELD_BLOCK.value(), 1.0F, 0.8F + instance.level().random.nextFloat() * 0.4F);
+            instance.playSound(SoundEvents.SHIELD_BLOCK.value(), 1.0F, 0.8F + instance.level().getRandom().nextFloat() * 0.4F);
             return;
         }
         original.call(instance, p_21160_);
@@ -54,7 +54,7 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
             double x,
             double z,
             Operation<Void> original,
-            @Local(name = "flag") boolean completeBlock
+            @Local(name = "blocked") boolean completeBlock
     ){
         if(completeBlock) {
             original.call(instance, strength * 0.2, x, z);

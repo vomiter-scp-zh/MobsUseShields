@@ -9,6 +9,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
+import net.minecraft.tags.TagEntry;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
@@ -42,7 +43,7 @@ public class ModTagProviders {
 
         @Override
         protected void addTags(HolderLookup.@NotNull Provider lookupProvider) {
-            tag(ModTags.DISABLE_SHIELD);
+            tag(ModTags.DISABLE_SHIELD).add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath("guardvillagers", "guard")));
         }
     }
 

@@ -38,7 +38,7 @@ public abstract class MobMixin extends LivingEntity implements ICanUseShieldMob{
 
     @Override
     public boolean mus$canUseShield() {
-        return MUS$CAN_USE_SHIELD && !getType().is(ModTags.DISABLE_SHIELD);
+        return MUS$CAN_USE_SHIELD && !is(ModTags.DISABLE_SHIELD);
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.monster.illager.IllagerModel;
 import net.minecraft.client.renderer.entity.state.IllagerRenderState;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -74,9 +75,7 @@ public class IllagerModelMixin {
         this.leftArm.yRot = 0.0F;
         this.leftArm.zRot = 0.0F;
 
-        if (renderState.useItemHand == InteractionHand.MAIN_HAND) {
-            //wierd, but it seems to consider it's using main hand despite the shield being in offhand
-            //or is vindicator's left hand its main hand?
+        if ((renderState.useItemHand == InteractionHand.MAIN_HAND) == (renderState.mainArm == HumanoidArm.RIGHT)) {
             this.rightArm.xRot = -0.2F;
             this.rightArm.yRot = -0.52F;
             this.rightArm.zRot = 0.0F;
