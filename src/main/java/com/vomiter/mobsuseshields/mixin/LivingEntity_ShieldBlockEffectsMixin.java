@@ -14,15 +14,20 @@ import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.hoglin.HoglinBase;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
+    @Shadow
+    public abstract ItemStack getUseItem();
+
     LivingEntity_ShieldBlockEffectsMixin(EntityType<?> p_19870_, Level p_19871_) {
         super(p_19870_, p_19871_);
     }
@@ -79,6 +84,12 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
             if(attacker.getSecondsToDisableBlocking() > 0 || canDisableBlocking){
                 shieldMob.mus$setNextShieldAllowedTick(level().getGameTime() + 20 * 5);
                 shieldMob.mus$diableShield(true);
+                var itemInUse = getUseItem();
+                BlocksAttacks blocksAttacks = itemInUse.get(DataComponents.BLOCKS_ATTACKS);
+                if (blocksAttacks != null){
+                    float secondsToDisableBlocking = attacker.getSecondsToDisableBlocking();
+                    blocksAttacks.disable(level, mob, secondsToDisableBlocking, itemInUse);
+                }
             }
 
             if(attacker instanceof HoglinBase || attacker instanceof Ravager) return;
