@@ -75,6 +75,7 @@ public abstract class LivingEntity_ShieldBlockEffectsMixin extends Entity {
             )){
                 shieldMob.mus$setNextShieldAllowedTick(level().getGameTime() + 20 * 5);
                 shieldMob.mus$diableShield(true);
+                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
             }
 
             if(attacker instanceof HoglinBase || attacker instanceof Ravager) return;
