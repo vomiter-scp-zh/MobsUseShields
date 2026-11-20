@@ -157,7 +157,7 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
             shieldItem = Items.SHIELD;
         }
 
-        ItemStack fallbackStack = new ItemStack(shieldItem);
+        Item fallbackItem = shieldItem;
 
         Function<HolderLookup.Provider, ItemStack> shieldStackGetter = lookup -> {
             if (obj.has("shield_stack")) {
@@ -178,7 +178,7 @@ public class MobShieldConfigReloadListener extends SimpleJsonResourceReloadListe
                 }
             }
 
-            return fallbackStack.copy();
+            return new ItemStack(fallbackItem);
         };
 
         float shieldChance = GsonHelper.getAsFloat(obj, "chance", 0.0f);
