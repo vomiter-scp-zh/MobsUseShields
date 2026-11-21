@@ -6,7 +6,11 @@ import net.minecraft.world.item.Items;
 
 import java.util.function.Function;
 
-public record MobShieldSpawnEntry(Function<HolderLookup.Provider, ItemStack> shield, float chance, float minDifficulty) {
+public record MobShieldSpawnEntry(Function<HolderLookup.Provider, ItemStack> shield, float chance, float minDifficulty, Double weight) {
+    public MobShieldSpawnEntry(Function<HolderLookup.Provider, ItemStack> shield, float chance, float minDifficulty) {
+        this(shield, chance, minDifficulty, null);
+    }
+
     public static final MobShieldSpawnEntry DEFAULT =
             new MobShieldSpawnEntry(
                     (ra) -> new ItemStack(Items.SHIELD),
