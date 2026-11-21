@@ -1,4 +1,9 @@
 {
-  "enabled": true,
-  "chance": 0.1
+  "spawn_chance": 0.1,
+  "shields": [
+    {
+      "shield_id": "minecraft:shield",
+      "weight": 1
+    }
+  ]
 }
